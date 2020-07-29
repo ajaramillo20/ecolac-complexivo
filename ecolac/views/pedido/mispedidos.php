@@ -21,11 +21,8 @@
                     <th>Costo</th>
                     <th>Estado</th>
                     <th>Direccion de entrega</th>
-                    <th>Ciudad</th>
-                    <!-- <th>Sucursal</th> -->
-                    <th class="thAction">Detalles</th>
-                    
-                    <!-- <th class="thAction">Quitar</th> -->
+                    <th>Ciudad</th>                    
+                    <th class="thAction">Detalles</th>                    
                 </tr>
             </thead>
             <tbody>
