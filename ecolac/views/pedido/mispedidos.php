@@ -10,7 +10,6 @@
     }
     $pedidos = AppController::GetPedidosByUsuarioId($_SESSION['userconnect']->usr_id);
     ?>
-
     <div class="contenedor">
         <table>
             <thead>
