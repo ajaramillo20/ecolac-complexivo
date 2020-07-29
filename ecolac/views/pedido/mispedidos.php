@@ -14,8 +14,7 @@
     <div class="contenedor">
         <table>
             <thead>
-                <tr>
-                    <!-- <th>Id</th> -->
+                <tr>                    
                     <th>ID</th>
                     <th>Fecha</th>
                     <th>Costo</th>
