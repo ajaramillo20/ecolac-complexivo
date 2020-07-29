@@ -105,9 +105,9 @@ class App
 
     public static function Redirect($url = '')
     {
-        //header("Location:" . base_url . $url);
-        echo '<script type="text/javascript">' .
-            'window.location.href="' . base_url . $url . '"' .
-            '</script>';
+        header("Location:" . base_url . $url);
+        // echo '<script type="text/javascript">' .
+        //     'window.location.href="' . base_url . $url . '"' .
+        //     '</script>';
     }
 }

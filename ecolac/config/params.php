@@ -25,6 +25,5 @@ define("logged_pantallas", array(
     'usuario/actualizarperfil',
     'usuario/historialcompras'
 ));
-
 define("products_path", 'files/images/productos');
 define("users_path", 'files/images/usuarios');

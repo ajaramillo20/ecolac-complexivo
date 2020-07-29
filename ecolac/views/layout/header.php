@@ -16,24 +16,11 @@
 <body>
     <header>
         <div class="contenedor">
-            <h1><img src="<?= base_url ?>Recursos/img/appicon.png" />ECOLAC</h1>
+            <h1><img alt="Ecolac" src="<?= base_url ?>Recursos/img/appicon.png" />ECOLAC</h1>
             <input type="checkbox" id="menu-bar" />
             <label class="icon-menu" for="menu-bar"></label>
             <nav class="menu">
-                <a href="<?= base_url ?>">Inicio</a>
-                <a href="<?= base_url ?>">Productos</a>
-                <?php if (!isset($_SESSION['userconnect'])) : ?>
-                    <a href="<?= base_url ?>usuario/login">Ingresar</a>
-                <?php else : ?>
-                    <?php $pantallas = AppController::GetMenuByRol($_SESSION['userconnect']->rol_id); ?>
-                    <?php foreach ($pantallas as $p) : ?>
-                        <?php if ($p->pnt_menu) : ?>
-                            <a href="<?= base_url . $p->pnt_vinculo ?>"><?= $p->pnt_nombre ?></a>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                    <a class="icon-user" href="<?= base_url ?>usuario/perfil">(<?= $_SESSION['userconnect']->usr_nombre ?>)</a>
-                    <a class="icon-logout" href="<?= base_url ?>usuario/logout"></a>
-                <?php endif; ?>
+             <?php require_once 'views/layout/menu.php'; ?>
             </nav>
         </div>
     </header>
