@@ -1,0 +1,49 @@
+/*ESTILOS GENERALES*/
+
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body
+{
+    background: #f1f1f1;
+    
+}
+
+a{
+    color: white;
+    
+}
+
+a:visited
+{
+    color: white;
+}
+
+a:hover{color:gray;}
+
+#container{
+    width:  90%;
+    margin: 0px auto;
+    box-shadow: 0px 0px 10px #1c2873;
+    background: whitesmoke;
+}
+
+/*ESTILOS HEADER*/
+
+#header{
+    height: 100px;    
+    background: #1c2873;
+}
+
+
+#logo img{
+    padding: 20px;
+    height: 55px;
+}
+
+.product img{
+    
+    width: 100px;
+}

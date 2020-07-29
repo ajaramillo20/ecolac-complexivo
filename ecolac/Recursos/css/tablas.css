@@ -1,0 +1,130 @@
+.miTabla h3, h4{
+    text-align: center;
+}
+
+.miTabla .contenedor
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.miTabla{
+    
+    text-align: center;
+}
+
+.miTabla article{
+    margin: 15px;
+}
+
+.miTabla img{
+    width: 100%;
+    max-width: 100px;
+}
+
+.miTabla table{
+    border: 2px solid #333;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+}
+
+.miTabla table tr
+{
+    background: #fff;
+    border: 1px solid #333;
+}
+
+/* .miTabla .thAction
+{
+    border-bottom: 1px solid #333;
+    width: 5%;
+    padding: 2px;
+    word-wrap: break-word;        
+} */
+
+.btn-action:visited,link
+{
+    color: #333;
+}
+
+ .miTabla th{
+    background: rgba(51,51,51,0.9);
+    color: #fff;
+}
+
+/* .miTabla th, td {
+    border-bottom: 1px solid #333;    
+    width: 100px;
+    padding: 2px;
+    word-wrap: break-word;
+}  */
+
+.miTabla th, td {
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+}
+
+.miTabla table thead{
+    text-transform: uppercase;
+}
+
+.miTabla table tbody tr:hover
+{
+    background-color: rgba(148, 146, 146, 0.9);
+}
+
+.miTabla .btn{
+    justify-content: left;
+    display: block;    
+    color: #333;
+    text-decoration: none;
+    padding: 7px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: 3px solid #333;
+} 
+
+@media(max-width: 800px)
+{
+    .miTabla table
+    {
+    border: 0px;
+    }
+
+    .miTabla table thead{
+        display: none;
+    }
+
+    .miTabla tr{
+        margin-bottom: 8px;
+        border-bottom: 4px solid #333;
+        display: block;
+    }
+
+    .miTabla table th,td{
+        font-size: 12px;
+    }
+
+    .miTabla table td{
+        display: block;
+        border-bottom: 1px solid #333;
+        text-align: right;
+    }
+
+    .miTabla table td:last-child{
+        border-bottom: 0px;
+    }
+    
+    .miTabla table td::before{
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: uppercase;
+        float: left;
+    }
+}
