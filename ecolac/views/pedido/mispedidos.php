@@ -31,9 +31,8 @@
                         <td data-label="COSTO"><?= $ped->ped_costo ?></td>
                         <td data-label="ESTADO"><?= $ped->pes_nombre ?></td>
                         <td data-label="Dirección de entrega"><?= $ped->dir_direccion ?></td>
-                        <td data-label="Ciudad"><?= $ped->ciu_nombre ?></td>
-                        <!-- <td data-label="Sucursal"><?= $pro->suc_nombre ?></td> -->
-                        <td data-label="Detalles"><a href="<?= base_url . 'pedido/detalles&id=' . $ped->ped_id ?>" class="icon-eye"></a></td>
+                        <td data-label="Ciudad"><?= $ped->ciu_nombre ?></td>                        
+                        <td data-label="Detalles"><a href="<?= base_url . 'pedido/detallepedido&id=' . $ped->ped_id ?>" class="icon-eye"></a></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

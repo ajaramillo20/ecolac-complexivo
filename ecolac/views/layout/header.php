@@ -20,7 +20,7 @@
             <input type="checkbox" id="menu-bar" />
             <label class="icon-menu" for="menu-bar"></label>
             <nav class="menu">
-             <?php require_once 'views/layout/menu.php'; ?>
+                <?php require_once 'views/layout/menu.php'; ?>
             </nav>
         </div>
     </header>

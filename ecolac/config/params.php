@@ -23,7 +23,8 @@ define("logged_pantallas", array(
     'direccion/agregar',
     'direccion/actualizar',
     'usuario/actualizarperfil',
-    'usuario/historialcompras'
+    'usuario/historialcompras',
+    'pedido/detallepedido'
 ));
 define("products_path", 'files/images/productos');
 define("users_path", 'files/images/usuarios');

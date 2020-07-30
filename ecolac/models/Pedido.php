@@ -1,4 +1,5 @@
 <?php
+require_once 'models/Direccion.php';
 class pedido
 {
     public $ped_id;
@@ -9,6 +10,10 @@ class pedido
     public $usr_rep_id;
     public $ped_fecha;
     public $ped_costo;
+    //Relaciones
+    public $Direccion;
+    public $Productos = array();
+    public $Estado;
 
     private $db;
 
@@ -69,6 +74,46 @@ class pedido
                 }
             }
         }
+    }
+
+    public function GetPedidoById()
+    {
+        $sql = "SELECT * FROM pedido ped                 
+                WHERE ped.ped_id = {$this->ped_id}";
+
+
+        $sqlDir = "SELECT dir.dir_direccion, dir.dir_latitud, dir.dir_longitud, ciu.ciu_nombre, usr.usr_nombre FROM direccion dir                                      
+                   INNER JOIN pedido ped ON dir.dir_id = ped.dir_id                   
+                   INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id                   
+                   INNER JOIN usuariodireccion usd on dir.dir_id = usd.dir_id
+                   INNER JOIN usuario usr on usd.usr_id = usr.usr_id
+                   WHERE ped.ped_id = {$this->ped_id}";
+
+        $sqlPro = "SELECT pro.pro_id, pro.pro_nombre, pro.pro_valor, prp.prp_cantidad FROM producto pro
+                   INNER JOIN productopedido prp ON pro.pro_id = prp.pro_id
+                   INNER JOIN pedido ped ON prp.ped_id = ped.ped_id
+                   WHERE ped.ped_id = {$this->ped_id}";
+
+        $sqlEstado = "SELECT * FROM statuspedido pes
+                      INNER JOIN pedido ped ON pes.pes_id = ped.pes_id
+                      WHERE ped.ped_id= {$this->ped_id}";
+
+        $result = $this->db->query($sql);
+        $resultDir = $this->db->query($sqlDir);
+        $resultPro = $this->db->query($sqlPro);
+        $resultEstado = $this->db->query($sqlEstado);
+
+        if ($result && $resultDir && $resultPro && $resultEstado) {
+            $entity = $result->fetch_object('Pedido');
+            $entity->Estado = $resultEstado->fetch_object();
+            $entity->Direccion = $resultDir->fetch_object();
+
+            while ($r = $resultPro->fetch_object()) {
+                array_push($entity->Productos, $r);
+            }
+            return $entity;
+        }
+        return null;
     }
 
     public function GetPedidosByUserId()

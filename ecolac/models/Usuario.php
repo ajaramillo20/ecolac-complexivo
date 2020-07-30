@@ -13,7 +13,9 @@ class Usuario extends IOModel
     public $usr_contrasena;
     public $rol_id;
     public $suc_id;
+    //Relaciones
     public $Direccion = array();
+    
     protected $db;
 
     public function __construct()

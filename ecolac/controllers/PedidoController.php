@@ -12,7 +12,7 @@ class PedidoController
     public function agregar()
     {
         try {
-            if (isset($_POST)) {                
+            if (isset($_POST)) {
                 $ped = new pedido();
                 $ped->usr_id = $_SESSION['userconnect']->usr_id;
                 $ped->dir_id = $_POST['direccion'];
@@ -36,5 +36,15 @@ class PedidoController
     public function mispedidos()
     {
         require_once 'views/pedido/mispedidos.php';
+    }
+
+    public function detallepedido()
+    {
+        if (isset($_GET['id'])) {
+            $ped = new Pedido();
+            $ped->ped_id = $_GET['id'];
+            $entity = $ped->GetPedidoById();
+            require_once 'views/pedido/detallepedido.php';
+        }
     }
 }

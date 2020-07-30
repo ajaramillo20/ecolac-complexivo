@@ -6,20 +6,24 @@
     } else if (isset($_SESSION['userconnect']) && !isset($entity)) {
         App::Redirect(base_url);
     }
+    
+    if (isset($entity) && !is_null($entity)) {
+        $url_action = base_url . 'usuario/actualizar';
+        $titulo = 'Editar usuario';
+        $roles = AppController::GetRoles();
+        $sucursales = AppController::GetSucursales();
+    } else {
+        $url_action = base_url . 'usuario/agregar';
+        $titulo = 'Registro de usuario';
+        $ciudades = AppController::GetCidades();
+    }
     ?>
-    <?php if (isset($entity) && !is_null($entity)) : ?>
-        <!-- <?php $url_action = base_url . 'usuario/actualizar&id=' . $entity->usr_id ?>                -->
-        <?php $url_action = base_url . 'usuario/actualizar' ?>
-        <h1>Editar usuario</h1>
-    <?php else : ?>
-        <?php $url_action = base_url . 'usuario/agregar' ?>
-        <h1>Registro de usuarios</h1>
-    <?php endif; ?>
+
+    <h1><?= $titulo ?></h1>
     <form action="<?= $url_action ?>" method="POST" class="form-registro">
         <h2>Ingrese sus datos</h2>
         <div class="contenedor-inputs">
             <input type="text" name="usr_id" placeholder="usr_id" hidden="true" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->usr_id : '';  ?>" />
-            <!-- <input type="text" name="dir_id" placeholder="dir_id" hidden="true" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->dir_id : '';  ?>" /> -->
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" placeholder="Nombre" required="true" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->usr_nombre : '';  ?>" />
             <label for="cedula">Cédula</label>
@@ -34,13 +38,15 @@
             <input type="password" name="contrasena" placeholder="Contraseña" <?= isset($entity) && !is_null($entity) ? 'hidden="true"' : 'required="true"'; ?> class="input-100" />
 
             <?php if (isset($entity) && !is_null($entity)) : ?>
+
                 <label for="rol">Rol</label>
                 <select name="rol" class="input-100">
-                    <?php $roles = AppController::GetRoles(); ?>
                     <?php foreach ($roles as $rol) : ?>
+
                         <option value="<?= $rol->rol_id ?>" <?= isset($entity) && !is_null($entity) && $rol->rol_id == $entity->rol_id ? 'selected' : ''; ?>>
                             <?= $rol->rol_nombre ?>
                         </option>
+
                     <?php endforeach; ?>
                 </select>
 
@@ -49,12 +55,15 @@
                     <option>
 
                     </option>
-                    <?php $sucursales = AppController::GetSucursales(); ?>
+
                     <?php while ($suc = $sucursales->fetch_object()) : ?>
+
                         <option value="<?= $suc->suc_id ?>" <?= isset($entity) && !is_null($entity) && $suc->suc_id == $entity->suc_id ? 'selected' : ''; ?>>
                             <?= $suc->suc_nombre ?>
                         </option>
+
                     <?php endwhile; ?>
+
                 </select>
             <?php endif; ?>
 
@@ -62,11 +71,13 @@
                 <label>Datos domicilio</label>
                 <input type="text" name="direccion" placeholder="Dirección" required="true" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->dir_direccion : ''; ?>" />
                 <select name="ciudad" class="input-100">
-                    <?php $ciudades = AppController::GetCidades(); ?>
+
                     <?php while ($ciu = $ciudades->fetch_object()) : ?>
+
                         <option value="<?= $ciu->ciu_id ?>" <?= isset($entity) && !is_null($entity) && $ciu->ciu_id == $entity->ciu_id ? 'selected' : ''; ?>>
                             <?= $ciu->ciu_nombre ?>
                         </option>
+                        
                     <?php endwhile; ?>
                 </select>
                 <input type="text" name="latitud" placeholder="Latitud" required="true" readonly="true" class="input-48" value="<?= isset($entity) && !is_null($entity) ? $entity->dir_latitud : ''; ?>" />

@@ -9,6 +9,13 @@
     flex-wrap: wrap;
 }
 
+.miTabla .informacion
+{
+    text-align: left;
+    padding: 1px;
+    padding-left: 14px;
+}
+
 .miTabla{
     
     text-align: center;
