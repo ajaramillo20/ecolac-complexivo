@@ -134,6 +134,7 @@ CREATE TABLE Pedido (
     ped_fecha DATETIME NULL,    
     ped_costo FLOAT(100,2) NOT NULL,
     CONSTRAINT FK_Pedido_ToTable_StatusPedido FOREIGN KEY (pes_id) REFERENCES StatusPedido (pes_id),
+    CONSTRAINT FK_Pedido_ToTable_Direccion FOREIGN KEY (dir_id) REFERENCES Direccion (dir_id),
     CONSTRAINT FK_Pedido_ToTable_Usuario FOREIGN KEY (usr_id) REFERENCES Usuario (usr_id),
     CONSTRAINT FK_Pedido_ToTable_Usuario_Repartidor FOREIGN KEY (usr_rep_id) REFERENCES Usuario (usr_id),
     CONSTRAINT FK_Pedido_ToTable_Usuario_Vendedor FOREIGN KEY (usr_ven_id) REFERENCES Usuario (usr_id)

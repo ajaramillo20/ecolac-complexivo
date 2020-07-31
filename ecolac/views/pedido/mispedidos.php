@@ -27,7 +27,7 @@
                 <?php while ($ped  = $pedidos->fetch_object()) : ?>
                     <tr>
                         <td data-label="ID"><?= $ped->ped_id ?></td>
-                        <td data-label="FECHA"><?= $ped->ped_fecha ?></td>
+                        <td data-label="FECHA"><?= StringFormat::DateFormat($ped->ped_fecha) ?></td>
                         <td data-label="COSTO"><?= $ped->ped_costo ?></td>
                         <td data-label="ESTADO"><?= $ped->pes_nombre ?></td>
                         <td data-label="Dirección de entrega"><?= $ped->dir_direccion ?></td>

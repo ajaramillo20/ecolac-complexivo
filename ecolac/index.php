@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'App/StringFormat.php';
 require_once 'App/App.php';
 require_once 'App/Enums/PedidosEstatus.php';
 require_once 'autoload.php';

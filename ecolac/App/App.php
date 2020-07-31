@@ -85,7 +85,7 @@ class App
         $nombre = $archivo['name'];
         $type = $archivo['type'];
 
-        $path = App::IsNullOrEmptyString($path) ? 'files/image' : $path;
+        $path = StringFormat::IsNullOrEmptyString($path) ? 'files/image' : $path;
         $fullPath = $path . '/' . $nombre;
 
         if ($type == 'image/jpg' || $type == 'image/jpeg' || $type == 'image/png' || $type == 'image/gif') {
@@ -97,12 +97,7 @@ class App
         }
         return false;
     }
-
-    public static function IsNullOrEmptyString($str)
-    {
-        return (!isset($str) || trim($str) === '');
-    }
-
+   
     public static function Redirect($url = '')
     {
         header("Location:" . base_url . $url);

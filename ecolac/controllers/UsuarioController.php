@@ -126,7 +126,7 @@ class UsuarioController
             $usr->usr_telefono = $_POST['telefono'];
             $usr->usr_usuario = $_POST['usuario'];
             $usr->rol_id = $_POST['rol'];
-            $usr->suc_id = App::IsNullOrEmptyString($_POST['sucursal']) ? 'null' : $_POST['sucursal'];
+            $usr->suc_id = StringFormat::IsNullOrEmptyString($_POST['sucursal']) ? 'null' : $_POST['sucursal'];
 
             $result = $usr->ActualizarUsuario();
 

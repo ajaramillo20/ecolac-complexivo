@@ -1,6 +1,6 @@
 <?php
 require_once 'models/Direccion.php';
-class pedido
+class Pedido
 {
     public $ped_id;
     public $usr_id;
@@ -78,40 +78,41 @@ class pedido
 
     public function GetPedidoById()
     {
-        $sql = "SELECT * FROM pedido ped                 
-                WHERE ped.ped_id = {$this->ped_id}";
-
-
-        $sqlDir = "SELECT dir.dir_direccion, dir.dir_latitud, dir.dir_longitud, ciu.ciu_nombre, usr.usr_nombre FROM direccion dir                                      
-                   INNER JOIN pedido ped ON dir.dir_id = ped.dir_id                   
-                   INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id                   
-                   INNER JOIN usuariodireccion usd on dir.dir_id = usd.dir_id
-                   INNER JOIN usuario usr on usd.usr_id = usr.usr_id
-                   WHERE ped.ped_id = {$this->ped_id}";
-
-        $sqlPro = "SELECT pro.pro_id, pro.pro_nombre, pro.pro_valor, prp.prp_cantidad FROM producto pro
-                   INNER JOIN productopedido prp ON pro.pro_id = prp.pro_id
-                   INNER JOIN pedido ped ON prp.ped_id = ped.ped_id
-                   WHERE ped.ped_id = {$this->ped_id}";
-
-        $sqlEstado = "SELECT * FROM statuspedido pes
-                      INNER JOIN pedido ped ON pes.pes_id = ped.pes_id
-                      WHERE ped.ped_id= {$this->ped_id}";
+        //PEDIDO
+        $sql = "SELECT ped.ped_id, ped.ped_fecha, ped.ped_costo, pes.pes_nombre, usr.usr_id, usr.usr_nombre,
+        usr.usr_telefono, usr.usr_cedula, usr.usr_correo, dir.dir_id, dir.dir_direccion, dir.dir_latitud, dir.dir_longitud,
+        ven.usr_id as ven_id, ven.usr_nombre as ven_nombre, rep.usr_id as rep_id, rep.usr_nombre as rep_nombre,
+        ciu.ciu_id, ciu.ciu_nombre, suc.suc_id, suc.suc_nombre, dirsuc.dir_id as dirsuc_id, dirsuc.dir_direccion as dirsuc_direccion,
+        dirsuc.dir_latitud as dirsuc_latitud, dirsuc.dir_longitud as dirsuc_longitud
+        FROM pedido ped
+        INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
+        INNER JOIN direccion dir on ped.dir_id = dir.dir_id
+        INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id
+        INNER JOIN usuario usr on ped.usr_id = usr.usr_id
+        LEFT JOIN usuario ven on ped.usr_ven_id = ven.usr_id
+        LEFT JOIN usuario rep on ped.usr_rep_id = rep.usr_id
+        LEFT JOIN sucursal suc on ven.suc_id = suc.suc_id
+        LEFT JOIN direccion dirsuc on suc.dir_id = dirsuc.dir_id
+        WHERE ped.ped_id = {$this->ped_id}";
 
         $result = $this->db->query($sql);
-        $resultDir = $this->db->query($sqlDir);
-        $resultPro = $this->db->query($sqlPro);
-        $resultEstado = $this->db->query($sqlEstado);
 
-        if ($result && $resultDir && $resultPro && $resultEstado) {
-            $entity = $result->fetch_object('Pedido');
-            $entity->Estado = $resultEstado->fetch_object();
-            $entity->Direccion = $resultDir->fetch_object();
+        //PRODUCTOS
+        $sqlProductos = "SELECT pro.pro_id, pro.pro_nombre, pro.pro_valor, prp.prp_cantidad FROM producto pro
+                         INNER JOIN productopedido prp on prp.pro_id = pro.pro_id
+                         INNER JOIN pedido ped on prp.ped_id = ped.ped_id
+                        WHERE ped.ped_id = {$this->ped_id}";
 
-            while ($r = $resultPro->fetch_object()) {
-                array_push($entity->Productos, $r);
+        $resultPro = $this->db->query($sqlProductos);
+
+        if ($result && $resultPro) {
+            $pedidoEntity = $result->fetch_object();
+            $pedidoEntity->Productos = array();
+
+            while ($pro = $resultPro->fetch_object()) {
+                array_push($pedidoEntity->Productos, $pro);
             }
-            return $entity;
+            return $pedidoEntity;
         }
         return null;
     }
@@ -129,6 +130,30 @@ class pedido
         if ($result) {
             return $result;
         }
+        return null;
+    }
+
+    public function GetAllPedidos()
+    {
+        $sql = "SELECT ped.ped_id, ped.ped_fecha, usr.usr_nombre, pes.pes_nombre,
+                dir.dir_direccion, ven.usr_nombre AS ven_nombre,
+                rep.usr_nombre AS rep_nombre FROM pedido ped
+                INNER JOIN usuario usr ON ped.usr_id = usr.usr_id
+                INNER JOIN direccion dir ON ped.dir_id = dir.dir_id
+                INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
+                LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id
+                LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id";
+
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            $pedidosResult = array();
+            while ($ped = $result->fetch_object()) {
+                array_push($pedidosResult, $ped);
+            }
+            return $pedidosResult;
+        }
+
         return null;
     }
 }
