@@ -17,6 +17,30 @@ class PedidoController
         require_once 'views/pedido/gestion.php';
     }
 
+    public function gestionpedido()
+    {
+        if (isset($_GET['id'])) {
+            $ped = new Pedido();
+            $ped->ped_id = $_GET['id'];
+            $entity = $ped->GetPedidoById();
+            require_once 'views/pedido/gestionpedido.php';
+        }
+    }
+
+    public function despachar()
+    {
+        if (isset($_GET['id'])) {
+            try {
+                $ped = new Pedido();
+                $ped->ped_id = $_GET['id'];
+                $ped->DespacharPedido();
+                var_dump($_GET);
+            } catch (\Throwable $th) {
+                App::Redirect('pedido/gestionpedido&id=' . $_GET['id']);
+            }
+        }
+    }
+
     public function agregar()
     {
         try {

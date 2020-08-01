@@ -17,7 +17,7 @@ class UsuarioController
         $usuarios = $usr->GetAllUsuarios();
         require_once 'views/usuario/gestion.php';
     }
-
+   
     public function registrar()
     {
         require_once 'views/usuario/registro.php';
