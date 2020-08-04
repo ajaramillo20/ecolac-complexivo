@@ -16,9 +16,13 @@ function ConfirmDelete(ruta) {
 }
 
 function MostrarMensaje(mensaje, titulo = 'Mensaje') {
-    $.alert({        
+    $.alert({
         theme: 'supervan',
         title: titulo,
-        content: mensaje,        
+        content: mensaje,
     });
+}
+
+function GoBack() {
+    window.history.back();
 }

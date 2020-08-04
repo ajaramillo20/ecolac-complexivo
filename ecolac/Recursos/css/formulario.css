@@ -73,6 +73,14 @@
     
 }
 
+.mapdetalles
+{
+    width: 400px;
+    height: 400px;
+    margin: 15px;
+    position: sticky;
+}
+
 
 .form-registro input{
     margin-bottom: 15px;

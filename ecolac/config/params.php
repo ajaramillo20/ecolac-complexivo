@@ -10,10 +10,7 @@ define("default_pantallas", array(
     'usuario/registroCompleto',
     'usuario/autenticacion',
     'categoria/tipo',
-    'usuario/perfil',
-    'carrito/agregar',
-    'carrito/eliminar',
-    'carrito/index',
+    'usuario/perfil'
 ));
 define("logged_pantallas", array(
     'pedido/realizar',
@@ -24,7 +21,11 @@ define("logged_pantallas", array(
     'direccion/actualizar',
     'usuario/actualizarperfil',
     'usuario/historialcompras',
-    'pedido/detallepedido'
+    'pedido/detallepedido',
+    'carrito/agregar',
+    'carrito/eliminar',
+    'carrito/index',
+    'producto/selectsucursal'
 ));
 define("products_path", 'files/images/productos');
 define("users_path", 'files/images/usuarios');

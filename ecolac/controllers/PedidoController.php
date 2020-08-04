@@ -13,7 +13,14 @@ class PedidoController
     {
         $ped = new Pedido();
         $pedidos = $ped->GetAllPedidos();
+        require_once 'views/pedido/gestion.php';
+    }
 
+    public function pedidossucursal()
+    {
+        $ped = new Pedido();
+        $ped->suc_id = $_SESSION['userconnect']->suc_id;
+        $pedidos = $ped->GetAllPedidosBySuc();
         require_once 'views/pedido/gestion.php';
     }
 
@@ -29,13 +36,16 @@ class PedidoController
 
     public function despachar()
     {
-        if (isset($_GET['id'])) {
+        if (isset($_GET['id']) && isset($_GET['ven'])) {
             try {
                 $ped = new Pedido();
                 $ped->ped_id = $_GET['id'];
+                $ped->usr_ven_id = $_GET['ven'];
                 $ped->DespacharPedido();
-                var_dump($_GET);
+                $_SESSION['pedidotoGestionMensaje'] = "Pedido #{$ped->ped_id} despachado correctamente :)";
+                App::Redirect('pedido/pedidossucursal');
             } catch (\Throwable $th) {
+                $_SESSION['gestionPedidoError'] = $th->getMessage();
                 App::Redirect('pedido/gestionpedido&id=' . $_GET['id']);
             }
         }
@@ -44,11 +54,14 @@ class PedidoController
     public function agregar()
     {
         try {
-            if (isset($_POST)) {
+            if (isset($_POST) && isset($_SESSION['succonnect'])) {
+
+                APP::ValidarDireccionPedido($_POST['direccion']);
                 $ped = new Pedido();
                 $ped->usr_id = $_SESSION['userconnect']->usr_id;
                 $ped->dir_id = $_POST['direccion'];
                 $ped->ped_costo = App::EstadisticasCarrito()['total'];
+                $ped->suc_id = $_SESSION['succonnect']->suc_id;
                 $result = $ped->GuardarPedido();
 
                 if (!is_null($result)) {

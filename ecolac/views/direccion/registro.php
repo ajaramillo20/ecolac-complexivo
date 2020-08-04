@@ -34,6 +34,11 @@
 
             <input type="text" name="longitud" placeholder="Longitud" required="true" readonly="true" class="input-48" value="<?= isset($entity) && !is_null($entity) ? $entity->dir_longitud : ''; ?>" />
             <div id="myMap"></div>
+            <label for="predeterminado">Direccion predeterminada</label>
+            <select name="predeterminado" class="input-100" required="true">
+                <option value="1" <?= isset($entity) && !is_null($entity) && $entity->dir_predeterminado == '1' ? 'selected' : '' ?>>SI</option>
+                <option value="0" <?= isset($entity) && !is_null($entity) && $entity->dir_predeterminado == '0' ? 'selected' : '' ?>>NO</option>
+            </select>
             <input type="submit" value="Guardar" class="btn-enviar" />
         </div>
     </form>

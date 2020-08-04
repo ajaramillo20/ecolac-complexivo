@@ -7,9 +7,28 @@ class ProductoController
 {
     public function index()
     {
-        $pro = new Producto();
-        $productos = $pro->GetAllProductos();
-        require_once 'views/producto/catalogo.php';
+        $sucursales = AppController::GetSucursales();
+        if (isset($_SESSION['succonnect']) && !is_null($_SESSION['succonnect'])) {
+            $pro = new Producto();
+            $pro->suc_id = $_SESSION['succonnect']->suc_id;
+            $productos = $pro->GetAllProductosBySucusal();
+            require_once 'views/producto/catalogo.php';
+        } 
+        else {
+            $pro = new Producto();
+            $productos = $pro->GetAllProductos();
+            require_once 'views/producto/catalogo.php';
+        }
+    }
+
+    public function selectsucursal()
+    {
+        if (isset($_GET['suc'])) {
+            $suc = AppController::GetSucursalById($_GET['suc']);
+            if (!is_null($suc)) {
+                App::SetSucursalSession($suc);
+            }
+        }
     }
 
     public function gestion()

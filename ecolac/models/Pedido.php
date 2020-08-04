@@ -10,6 +10,7 @@ class Pedido
     public $usr_rep_id;
     public $ped_fecha;
     public $ped_costo;
+    public $suc_id;
     //Relaciones
     public $Direccion;
     public $Productos = array();
@@ -29,8 +30,8 @@ class Pedido
             $estadoNuevo = PedidosEstatus::GetEstadoSelect(PedidosEstatus::Nuevo);
 
             $sql = "INSERT INTO pedido
-                (usr_id, dir_id, pes_id, ped_fecha, ped_costo ) VALUES
-                ({$this->usr_id}, {$this->dir_id}, ($estadoNuevo), CURDATE(), {$this->ped_costo})";
+                (usr_id, dir_id, pes_id, ped_fecha, ped_costo , suc_id) VALUES
+                ({$this->usr_id}, {$this->dir_id}, ($estadoNuevo), CURDATE(), {$this->ped_costo}, {$this->suc_id})";
             $result = $this->db->query($sql);
 
             if ($result) {
@@ -44,6 +45,41 @@ class Pedido
             $this->db->rollback();
             throw new Exception($th->getMessage());
         }
+    }
+
+    public function DespacharPedido()
+    {
+        if ($this->VerificarEstado(PedidosEstatus::Despachado)) {
+            throw new Exception("Este pedido ya fue despechado!");
+        }
+        $pesid = PedidosEstatus::GetEstadoSelect(PedidosEstatus::Despachado);
+        $sql = "UPDATE pedido SET pes_id = ({$pesid}),
+                usr_ven_id = {$this->usr_ven_id}
+                WHERE ped_id = {$this->ped_id}";
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            return $this;
+        }
+        throw new Exception("No se pudo actualizar el estado del pedido");
+    }
+
+    public function VerificarEstado($estado)
+    {
+        $sql = "SELECT pes.pes_nombre FROM pedido ped
+                INNER JOIN statuspedido pes on ped.pes_id = pes.pes_id
+                WHERE ped.ped_id = {$this->ped_id}";
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            $e = $result->fetch_object();
+            if ($e->pes_nombre == $estado) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     public function GuardarProductos()
@@ -91,7 +127,7 @@ class Pedido
         INNER JOIN usuario usr on ped.usr_id = usr.usr_id
         LEFT JOIN usuario ven on ped.usr_ven_id = ven.usr_id
         LEFT JOIN usuario rep on ped.usr_rep_id = rep.usr_id
-        LEFT JOIN sucursal suc on ven.suc_id = suc.suc_id
+        LEFT JOIN sucursal suc on ped.suc_id = suc.suc_id
         LEFT JOIN direccion dirsuc on suc.dir_id = dirsuc.dir_id
         WHERE ped.ped_id = {$this->ped_id}";
 
@@ -137,12 +173,39 @@ class Pedido
     {
         $sql = "SELECT ped.ped_id, ped.ped_fecha, usr.usr_nombre, pes.pes_nombre,
                 dir.dir_direccion, ven.usr_nombre AS ven_nombre,
-                rep.usr_nombre AS rep_nombre FROM pedido ped
+                rep.usr_nombre as rep_nombre, suc.suc_id, suc.suc_nombre FROM pedido ped
                 INNER JOIN usuario usr ON ped.usr_id = usr.usr_id
                 INNER JOIN direccion dir ON ped.dir_id = dir.dir_id
                 INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
-                LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id
+                INNER JOIN sucursal suc ON ped.suc_id = suc.suc_id
+                LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id                
                 LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id";
+
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            $pedidosResult = array();
+            while ($ped = $result->fetch_object()) {
+                array_push($pedidosResult, $ped);
+            }
+            return $pedidosResult;
+        }
+
+        return null;
+    }
+
+    public function GetAllPedidosBySuc()
+    {
+        $sql = "SELECT ped.ped_id, ped.ped_fecha, usr.usr_nombre, pes.pes_nombre,
+                dir.dir_direccion, ven.usr_nombre AS ven_nombre,
+                rep.usr_nombre as rep_nombre, suc.suc_id, suc.suc_nombre FROM pedido ped
+                INNER JOIN usuario usr ON ped.usr_id = usr.usr_id
+                INNER JOIN direccion dir ON ped.dir_id = dir.dir_id
+                INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
+                INNER JOIN sucursal suc ON ped.suc_id = suc.suc_id
+                LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id                
+                LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id
+                WHERE suc.suc_id = {$this->suc_id}";
 
         $result = $this->db->query($sql);
 

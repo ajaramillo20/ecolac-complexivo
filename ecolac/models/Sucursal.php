@@ -17,7 +17,8 @@ class Sucursal
     {
         $sql = "SELECT * FROM sucursal suc
                 INNER JOIN direccion dir on suc.dir_id = dir.dir_id
-                INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id";
+                INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id
+                ORDER BY ciu.ciu_nombre, suc.suc_nombre";
         $result = $this->db->query($sql);
         return $result;
     }

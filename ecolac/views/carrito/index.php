@@ -1,11 +1,11 @@
 <div class="miTabla">
     <h3>Productos en carrito</h3>
     <?php if (isset($_SESSION['carritoIndexMensaje'])) {
-        echo '<p class="succes">' . $_SESSION['carritoIndexMensaje'] . '</p>';
+        App::ShowMessage($_SESSION['carritoIndexMensaje'], 'Confirmación');
         App::UnsetSessionVar('carritoIndexMensaje');
     }
     if (isset($_SESSION['carritoIndexError'])) {
-        echo '<p class="error">' . $_SESSION['carritoIndexError'] . '</p>';
+        App::ShowMessage($_SESSION['carritoIndexError'], 'Error');
         App::UnsetSessionVar('carritoIndexError');
     }
     $datos = App::EstadisticasCarrito()
@@ -40,7 +40,7 @@
                             <td data-label="Unidades"><?= $elemento['unidades'] ?></td>
                             <!-- <td data-label="Sucursal"><?= $pro->suc_nombre ?></td> -->
                             <td data-label="Añadir/Quitar"><a href="<?= base_url . 'carrito/agregar&id=' . $pro->pro_id ?>" class="icon-carrito-agregar"></a></a>
-                                <a onclick="return ConfirmDelete();" class="icon-carrito-quitar" href="<?= base_url ?>producto/eliminar&id=<?= $pro->pro_id ?>"></td>
+                                <a class="icon-carrito-quitar" href="<?= base_url ?>carrito/eliminar&id=<?= $pro->pro_id ?>"></td>
 
                         </tr>
                     <?php endforeach; ?>

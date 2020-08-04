@@ -40,6 +40,21 @@ class Producto
         return null;
     }
 
+    public function GetAllProductosBySucusal()
+    {
+        $sql = "SELECT * from producto pro
+                INNER JOIN recursos rec ON pro.rec_id = rec.rec_id
+                INNER JOIN tipo tip ON pro.tip_id = tip.tip_id
+                INNER JOIN categoria cat ON pro.cat_id = cat.cat_id
+                inner join presentacion pre ON pro.pre_id = pre.pre_id
+                inner join sucursal suc ON pro.suc_id = suc.suc_id
+                inner join direccion dir ON suc.dir_id = dir.dir_id
+                inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id
+                WHERE suc.suc_id = {$this->suc_id}";
+        $result = $this->db->query($sql);
+        return $result;
+    }
+
     public function GetAllProductos()
     {
         $sql = "SELECT * from producto pro
@@ -63,7 +78,7 @@ class Producto
             }
 
             $this->db->begin_transaction();
-
+            $this->Recurso->rec_nombre = products_path . '/' . $this->Recurso->rec_nombre;
             $sqlRecurso = "INSERT INTO recursos (rec_nombre, rec_tipo) VALUES ('{$this->Recurso->rec_nombre}', '{$this->Recurso->rec_tipo}')";
             $resultRec = $this->db->query($sqlRecurso);
             $this->Recurso->rec_id = $this->db->insert_id;
@@ -88,7 +103,6 @@ class Producto
 
     public function EliminarProducto()
     {
-        
     }
 
     public function ActualizarProducto()
@@ -107,6 +121,7 @@ class Producto
 
 
             if (!is_null($this->Recurso)) {
+                $this->Recurso->rec_nombre = products_path . '/' . $this->Recurso->rec_nombre;
                 $sqlRecurso = "UPDATE recursos SET
                 rec_nombre = '{$this->Recurso->rec_nombre}',
                 rec_tipo = '{$this->Recurso->rec_tipo}'

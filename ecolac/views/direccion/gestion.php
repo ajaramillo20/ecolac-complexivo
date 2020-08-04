@@ -19,6 +19,7 @@
                     <th>Direccion</th>
                     <th>Latitud</th>
                     <th>Longitud</th>
+                    <th>Predeterminado</th>
                     <th class="thAction">Editar</th>
                     <th class="thAction">Eliminar</th>
                 </tr>
@@ -32,8 +33,9 @@
                             <td data-label="Direccion"><?= $dir->dir_direccion ?></td>
                             <td data-label="Latitud"><?= $dir->dir_latitud ?></td>
                             <td data-label="Longitud"><?= $dir->dir_longitud ?></td>
+                            <td data-label="Predeterminado"><?= $dir->dir_predeterminado ?></td>
                             <td data-label="editar"><a class="icon-eye btn-action" href="<?= base_url . 'direccion/editar&dir=' . $dir->dir_id ?>"></a></td>
-                            <td data-label="eliminar"><a onclick="return ConfirmDelete();" class="icon-trash btn-action" href="<?= base_url ?>direccion/eliminar&dir=<?= $dir->dir_id ?>"></a></td>
+                            <td data-label="eliminar"><a onclick="return ConfirmDelete('<?= base_url . 'direccion/eliminar&dir=' . $dir->dir_id ?>');" class="icon-trash btn-action"></a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

@@ -15,7 +15,7 @@ class Usuario extends IOModel
     public $suc_id;
     //Relaciones
     public $Direccion = array();
-    
+
     protected $db;
 
     public function __construct()
@@ -96,9 +96,9 @@ class Usuario extends IOModel
 
             $this->db->begin_transaction();
 
-            $sqlDir = "INSERT INTO direccion (dir_direccion, dir_latitud, dir_longitud, ciu_id)"
+            $sqlDir = "INSERT INTO direccion (dir_direccion, dir_latitud, dir_longitud, ciu_id,dir_predeterminado)"
                 . "VALUES ('{$this->Direccion[0]->dir_direccion}', '{$this->Direccion[0]->dir_latitud}', '{$this->Direccion[0]->dir_longitud}',"
-                . " '{$this->Direccion[0]->ciu_id}') ";
+                . " '{$this->Direccion[0]->ciu_id}',true) ";
 
             $resultDir = $this->db->query($sqlDir);
             $this->Direccion[0]->dir_id = $this->db->insert_id;
@@ -161,15 +161,15 @@ class Usuario extends IOModel
 
     public function IniciarSesion($correo, $contrasena)
     {
-        $sql = "SELECT * FROM usuario usr INNER JOIN rol rol ON usr.rol_id = rol.rol_id WHERE usr_correo = '{$correo}'";
+        $sql = "SELECT * FROM usuario usr 
+                INNER JOIN rol rol ON usr.rol_id = rol.rol_id
+                WHERE usr_correo = '{$correo}'";
 
         $result = $this->db->query($sql);
 
         if ($result && $result->num_rows == 1) {
             $entity = $result->fetch_object();
-
             $verify = App::VerifyHash($contrasena, $entity->usr_contrasena);
-
             if ($verify) {
                 return $entity;
             }

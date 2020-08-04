@@ -47,9 +47,8 @@ class DireccionController
             $dir->ciu_id = $_POST['ciudad'];
             $dir->dir_latitud = $_POST['latitud'];
             $dir->dir_longitud = $_POST['longitud'];
-
+            $dir->dir_predeterminado = $_POST['predeterminado'];
             $result = $dir->GuardarDireccion();
-
             if (is_null($result)) {
                 $_SESSION['direccionRegistroError'] = 'Error al guardar dirección';
                 App::Redirect('usuario/perfil');
@@ -69,6 +68,7 @@ class DireccionController
             $dir->ciu_id = $_POST['ciudad'];
             $dir->dir_latitud = $_POST['latitud'];
             $dir->dir_longitud = $_POST['longitud'];
+            $dir->dir_predeterminado = $_POST['predeterminado'];
             $result = $dir->ActualizarDireccion();
             if ($result) {
                 $_SESSION['direccionGestionMensaje'] = 'Dirección actualizada!';

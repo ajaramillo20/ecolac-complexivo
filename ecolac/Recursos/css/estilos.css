@@ -76,6 +76,15 @@ section {
     text-align: center;
 }
 
+.filters label
+{
+    margin:10px;
+}
+
+.filters select
+{
+    width: 150px;
+}
 
 /*FOOTER*/
 

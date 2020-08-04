@@ -18,7 +18,8 @@ CREATE TABLE Direccion (
     dir_direccion varchar (200) NULL,
     dir_latitud   varchar (100) NULL,
     dir_longitud  varchar (100) NULL,
-    ciu_id        INT        NULL,    
+    ciu_id        INT        NULL,
+    dir_predeterminado BOOLEAN NULL,    
     CONSTRAINT FK_Direccion_ToTable_Ciudad FOREIGN KEY (ciu_id) REFERENCES Ciudad (ciu_id)
 )ENGINE= InnoDB;
 
@@ -128,16 +129,18 @@ CREATE TABLE Pedido (
     ped_id     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     usr_id     INT NOT NULL,
     dir_id     INT NOT NULL,
-    pes_id     INT NOT NULL,
+    pes_id     INT NOT NULL,    
     usr_ven_id INT NULL,
     usr_rep_id INT NULL,
     ped_fecha DATETIME NULL,    
-    ped_costo FLOAT(100,2) NOT NULL,
+    ped_costo FLOAT(100,2) NOT NULL, 
+    suc_id int null,   
     CONSTRAINT FK_Pedido_ToTable_StatusPedido FOREIGN KEY (pes_id) REFERENCES StatusPedido (pes_id),
     CONSTRAINT FK_Pedido_ToTable_Direccion FOREIGN KEY (dir_id) REFERENCES Direccion (dir_id),
     CONSTRAINT FK_Pedido_ToTable_Usuario FOREIGN KEY (usr_id) REFERENCES Usuario (usr_id),
     CONSTRAINT FK_Pedido_ToTable_Usuario_Repartidor FOREIGN KEY (usr_rep_id) REFERENCES Usuario (usr_id),
-    CONSTRAINT FK_Pedido_ToTable_Usuario_Vendedor FOREIGN KEY (usr_ven_id) REFERENCES Usuario (usr_id)
+    CONSTRAINT FK_Pedido_ToTable_Usuario_Vendedor FOREIGN KEY (usr_ven_id) REFERENCES Usuario (usr_id),    
+    CONSTRAINT FK_Pedido_ToTable_Suc FOREIGN KEY (suc_id) REFERENCES Sucursal (suc_id);
 )ENGINE = InnoDB;
 
 

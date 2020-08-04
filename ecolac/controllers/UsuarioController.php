@@ -17,7 +17,7 @@ class UsuarioController
         $usuarios = $usr->GetAllUsuarios();
         require_once 'views/usuario/gestion.php';
     }
-   
+
     public function registrar()
     {
         require_once 'views/usuario/registro.php';
@@ -46,6 +46,8 @@ class UsuarioController
     {
         App::UnsetSessionVar('carrito');
         App::UnsetSessionVar('userconnect');
+        App::UnsetSessionVar('dirconnect');
+        App::UnsetSessionVar('succonnect');
         App::Redirect();
     }
 
@@ -61,7 +63,7 @@ class UsuarioController
             //var_dump($result);
 
             if ($result && !is_null($result)) {
-                $_SESSION["userconnect"] = $result;
+                App::SetSession($result);
                 App::Redirect();
             } else {
                 $_SESSION['loginError'] = 'Usuario o contraseña incorrectos';

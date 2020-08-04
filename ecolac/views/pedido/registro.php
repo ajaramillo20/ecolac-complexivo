@@ -21,7 +21,7 @@
             <?php $direcciones = AppController::GetDirecciones($_SESSION['userconnect']->usr_id); ?>
             <select name="direccion" class="input-100">
                 <?php foreach ($direcciones as $dir) : ?>
-                    <option value="<?= $dir->dir_id ?>" <?= isset($entity) && !is_null($entity) && $ciu->ciu_id == $entity->ciu_id ? 'selected' : ''; ?>>
+                    <option value="<?= $dir->dir_id ?>" <?= isset($_SESSION['dirconnect']) && $dir->dir_id == $_SESSION['dirconnect']->dir_id ? 'selected' : ''; ?>>
                         <?= $dir->dir_direccion ?>
                     </option>
                 <?php endforeach; ?>

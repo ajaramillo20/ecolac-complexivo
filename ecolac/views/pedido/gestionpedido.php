@@ -1,11 +1,11 @@
 <div class="miTabla">
-    <?php if (isset($_SESSION['gestionPedidoMisPedidosMensaje'])) {
-        echo '<p class="succes">' . $_SESSION['pedidoMisPedidosMensaje'] . '</p>';
-        App::UnsetSessionVar('gestionPedidoMisPedidosMensaje');
+    <?php if (isset($_SESSION['gestionPedidoMensaje'])) {
+        App::ShowMessage($_SESSION['gestionPedidoMensaje'], 'Confirmación');
+        App::UnsetSessionVar('gestionPedidoMensaje');
     }
-    if (isset($_SESSION['GestionPedidoMisPedidosError'])) {
-        echo '<p class="error">' . $_SESSION['GestionPedidoMisPedidosError'] . '</p>';
-        App::UnsetSessionVar('GestionPedidoMisPedidosError');
+    if (isset($_SESSION['gestionPedidoError'])) {
+        App::ShowMessage($_SESSION['gestionPedidoError'], 'Error');
+        App::UnsetSessionVar('gestionPedidoError');
     }
     if (!isset($entity) || is_null($entity)) {
         App::Redirect('pedido/gestion');
@@ -25,7 +25,17 @@
     <p class="informacion"><?= StringFormat::IsNullOrEmptyString($entity->rep_nombre) ? 'Repartidor: No asignado' : 'Repartidor: ' . $entity->ven_nombre ?></p>
     <br />
     <div class="contenedor">
-        <a class="btnaccion icon-cancel" onclick="ConfirmDelete('<?= base_url . 'pedido/rechazar&id=' . $entity->ped_id ?>');">Rechazar</a>
-        <a class="btnaccion icon-caja" href="<?= base_url . 'pedido/despachar&id=' . $entity->ped_id ?>">Despachar</a>
+
+
+        <?php if ($entity->pes_nombre != PedidosEstatus::Despachado) : ?>
+
+            <a class="btnaccion icon-cancel" onclick="ConfirmDelete('<?= base_url . 'pedido/rechazar&id=' . $entity->ped_id ?>');">Rechazar</a>
+            <a class="btnaccion icon-caja" href="<?= base_url . 'pedido/despachar&id=' . $entity->ped_id . '&ven=' . $_SESSION['userconnect']->usr_id ?>">Despachar</a>
+
+        <?php else : ?>
+
+            <a class="btnaccion icon-angle-circled-left" onclick="GoBack();">Regresar</a>
+
+        <?php endif; ?>
     </div>
 </div>

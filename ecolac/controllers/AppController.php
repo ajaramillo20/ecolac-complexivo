@@ -59,6 +59,14 @@ class AppController
         return $suc->GetAllSucursales();
     }
 
+    public static function GetsucursalById($sucid)
+    {
+        require_once 'models/Sucursal.php';
+        $suc = new Sucursal();
+        $suc->suc_id = $sucid;
+        return $suc->GetsucursalById();
+    }
+
     public static function GetDirecciones($usrid)
     {
         require_once 'models/Direccion.php';
@@ -67,11 +75,26 @@ class AppController
         return $dir->GetDireccionByUsuario();
     }
 
+    public static function GetDireccionById($dirid)
+    {
+        require_once 'models/Direccion.php';
+        $dir = new Direccion();
+        $dir->dir_id = $dirid;
+        return $dir->GetDireccionById();
+    }
+
     public static function GetPedidosByUsuarioId($usrid)
     {
         require_once 'models/Pedido.php';
         $ped = new Pedido();
         $ped->usr_id = $usrid;
         return $ped->GetPedidosByUserId();
+    }
+
+    public static function GetDefaultUserDir($usrid)
+    {
+        $dir = new Direccion();
+        $dir->usr_id = $usrid;
+        return $dir->GetDireccionPredeterminada();
     }
 }

@@ -97,12 +97,109 @@ class App
         }
         return false;
     }
-   
+
     public static function Redirect($url = '')
     {
         header("Location:" . base_url . $url);
         // echo '<script type="text/javascript">' .
         //     'window.location.href="' . base_url . $url . '"' .
         //     '</script>';
+    }
+
+    public static function GoBack()
+    {
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    public static function ShowMessage($mensaje, $titulo = 'Mensaje')
+    {
+        echo "<script type='text/javascript'>" .
+            "MostrarMensaje('{$mensaje}', '{$titulo}');" .
+            "</script>";
+    }
+
+
+    public static function SetSession($userconnect)
+    {
+        $_SESSION['userconnect'] = $userconnect;
+        App::GetDefaultDirSession();
+        //App::GetNearSuc();
+        //var_dump($_SESSION);
+    }
+
+    public static function SetDireccionSession($dir)
+    {
+        if (!is_null($dir)) {
+            $_SESSION['dirconnect'] = $dir;
+            App::GetNearSuc();
+        }
+    }
+
+    public static function SetSucursalSession($suc)
+    {
+        $_SESSION['succonnect'] = $suc;
+    }
+
+    public static function GetNearSuc()
+    {
+        if (isset($_SESSION['dirconnect'])) {
+            $sucursales = AppController::GetSucursales();
+            $suc = null;
+            $sucursal = null;
+            $longo = $_SESSION['dirconnect']->dir_longitud;
+            $lato = $_SESSION['dirconnect']->dir_latitud;
+            while ($s = $sucursales->fetch_object()) {
+                $distancia = App::getDistance($longo, $lato, $s->dir_longitud, $s->dir_latitud);
+
+                if ($suc == null) {
+                    $suc = $distancia;
+                    $sucursal = $s;
+                } else {
+                    if ($distancia < $suc) {
+                        $suc = $distancia;
+                        $sucursal = $s;
+                    }
+                }
+            }
+            $_SESSION['succonnect'] = $sucursal;
+        }
+    }
+
+    public static function GetDefaultDirSession()
+    {
+        $dir = AppController::GetDefaultUserDir($_SESSION['userconnect']->usr_id);
+        App::SetDireccionSession($dir);
+    }
+
+    public static function getDistance($long1, $lat1, $long2, $lat2)
+    {
+        // return distance in meters
+        $lon1 = App::toRadian($long1);
+        $lat1 = App::toRadian($lat1);
+        $lon2 = App::toRadian($long2);
+        $lat2 = App::toRadian($lat2);
+
+        $deltaLat = $lat2 - $lat1;
+        $deltaLon = $lon2 - $lon1;
+
+        $a = pow(sin($deltaLat / 2), 2) + cos($lat1) * cos($lat2) * pow(sin($deltaLon / 2), 2);
+        $c = 2 * asin(sqrt($a));
+        $EARTH_RADIUS = 6371;
+        return ($c * $EARTH_RADIUS * 1000);
+    }
+    public static function toRadian($degree)
+    {
+        return ($degree * pi() / 180);
+    }
+
+    public static function ValidarDireccionPedido($dirid)
+    {
+        $dirdata = AppController::GetDireccionById($dirid);
+        $sucsession = $_SESSION['succonnect'];
+        if ($dirdata->ciu_id == $sucsession->ciu_id) {
+            return true;
+        } else {
+            throw new Exception("Esta dirección pertenece a otra ciudad, seleccione otra dirección u otra sucursal");
+        }
     }
 }
