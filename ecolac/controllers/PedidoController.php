@@ -24,6 +24,31 @@ class PedidoController
         require_once 'views/pedido/gestion.php';
     }
 
+
+
+    public function entregassucursal()
+    {
+        $ped = new Pedido();
+        $ped->suc_id = $_SESSION['userconnect']->suc_id;
+        $pedidos = array();
+        foreach ($ped->GetAllPedidosBySuc() as $ped) {
+            if ($ped->pes_nombre == PedidosEstatus::Despachado || $ped->pes_nombre == PedidosEstatus::EnCamino || $ped->pes_nombre == PedidosEstatus::Entregado) {
+                array_push($pedidos, $ped);
+            }
+        }
+        require_once 'views/pedido/entregassucursal.php';
+    }
+
+    public function gestionentrega()
+    {
+        if (isset($_GET['id'])) {
+            $ped = new Pedido();
+            $ped->ped_id = $_GET['id'];
+            $entity = $ped->GetPedidoById();
+            require_once 'views/pedido/gestionentrega.php';
+        }
+    }
+
     public function gestionpedido()
     {
         if (isset($_GET['id'])) {
@@ -31,6 +56,29 @@ class PedidoController
             $ped->ped_id = $_GET['id'];
             $entity = $ped->GetPedidoById();
             require_once 'views/pedido/gestionpedido.php';
+        }
+    }
+
+    public function entregar()
+    {
+        try {
+            if (isset($_GET['id']) && isset($_GET['rep'])) {
+                $ped = new Pedido();
+                $ped->ped_id = $_GET['id'];
+                $ped->usr_rep_id = $_GET['rep'];
+                $ped->EntregarPedido();
+                $_SESSION['entregassucursalMensaje'] = "Entrega #{$ped->ped_id} asignado correctamente :)";
+                App::Redirect('pedido/entregassucursal');
+            } else if (isset($_GET['id'])) {
+                $ped = new Pedido();
+                $ped->ped_id = $_GET['id'];
+                $ped->ActualizarEstado(PedidosEstatus::Entregado);
+                $_SESSION['entregassucursalMensaje'] = "Pedido #{$ped->ped_id} Entregado";
+                App::Redirect('pedido/entregassucursal');
+            }
+        } catch (\Throwable $th) {
+            $_SESSION['gestionEntregaError'] = $th->getMessage();
+            App::Redirect('pedido/gestionentrega&id=' . $_GET['id']);
         }
     }
 

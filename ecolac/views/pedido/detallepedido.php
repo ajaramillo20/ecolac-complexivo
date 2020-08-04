@@ -22,7 +22,7 @@
     <p class="informacion"><?= 'Correo: ' . $entity->usr_correo ?></p>
     <p class="informacion"><?= 'Estado: ' . $entity->pes_nombre ?></p>
     <p class="informacion"><?= StringFormat::IsNullOrEmptyString($entity->ven_nombre) ? 'Vendedor: No asignado' : 'Vendedor: ' . $entity->ven_nombre ?></p>
-    <p class="informacion"><?= StringFormat::IsNullOrEmptyString($entity->rep_nombre) ? 'Repartidor: No asignado' : 'Repartidor: ' . $entity->ven_nombre ?></p>
+    <p class="informacion"><?= StringFormat::IsNullOrEmptyString($entity->rep_nombre) ? 'Repartidor: No asignado' : 'Repartidor: ' . $entity->rep_nombre ?></p>
     <p class="informacion"><?= StringFormat::IsNullOrEmptyString($entity->suc_nombre) ? 'Sucursal: -' : 'Sucursal: ' . $entity->suc_nombre ?></p>
     <br />
     <div class="contenedor">
@@ -62,6 +62,16 @@
     </div>
 </div>
 
-<script>
-    LoadMap(<?= $entity->dir_latitud ?>, <?= $entity->dir_longitud ?>);
-</script>
+<?php if ($entity->pes_nombre != PedidosEstatus::EnCamino) : ?>
+
+    <script>
+        LoadMap(<?= $entity->dir_latitud ?>, <?= $entity->dir_longitud ?>);
+    </script>
+
+<?php else : ?>
+
+    <script>
+        LoadMapRoute(<?= $entity->dir_latitud ?>, <?= $entity->dir_longitud ?>, <?= $entity->dirsuc_latitud ?>, <?= $entity->dirsuc_longitud ?>)
+    </script>
+
+<?php endif; ?>

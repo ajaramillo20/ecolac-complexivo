@@ -64,6 +64,39 @@ class Pedido
         throw new Exception("No se pudo actualizar el estado del pedido");
     }
 
+    public function EntregarPedido()
+    {
+        if ($this->VerificarEstado(PedidosEstatus::EnCamino)) {
+            throw new Exception("Este pedido ya fue asignado!");
+        }
+        $pesid = PedidosEstatus::GetEstadoSelect(PedidosEstatus::EnCamino);
+        $sql = "UPDATE pedido SET pes_id = ({$pesid}),
+                usr_rep_id = {$this->usr_rep_id}
+                WHERE ped_id = {$this->ped_id}";
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            return $this;
+        }
+        throw new Exception("No se pudo actualizar el estado del pedido");
+    }
+
+    public function ActualizarEstado($estado)
+    {
+        if ($this->VerificarEstado($estado)) {
+            throw new Exception("Este pedido ya tiene este estado!");
+        }
+        $pesid = PedidosEstatus::GetEstadoSelect($estado);
+        $sql = "UPDATE pedido SET pes_id = ({$pesid})                
+                WHERE ped_id = {$this->ped_id}";
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            return $this;
+        }
+        throw new Exception("No se pudo actualizar el estado del pedido");
+    }
+
     public function VerificarEstado($estado)
     {
         $sql = "SELECT pes.pes_nombre FROM pedido ped

@@ -35,41 +35,22 @@ function LoadMap(lat = "", long = "") {
     })
 }
 
-function LoadMapRoute(lat = "", long = "") {
-    //Parametros iniciales
-    var dir_lat = lat;
-    var dir_long = long;
+function LoadMapRoute(lat, long, lat2, long2) {
+    //Parametros iniciales    
     var tilesProvider = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    //var tilesProvider =  'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png';
-    var lat = dir_lat === "" ? -1.736 : dir_lat;
-    var long = dir_long === "" ? -78.322 : dir_long;
-    var zoom = (lat === -1.736 && long === -78.322) ? 6 : 16;
-    var currentLayer;
+    var map = L.map('myMap');
 
-    console.log(lat, long);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-    var myMap = L.map('myMap').setView([lat, long], zoom);
+    map.doubleClickZoom.disable();
 
-    if (dir_lat !== "" && dir_long !== "") {
-        currentLayer = L.marker([lat, long]).addTo(myMap);
-    }
-
-    L.tileLayer(tilesProvider, {
-        maxZoom: 18,
-    }).addTo(myMap);
-
-    L.Routing.control
-
-    myMap.doubleClickZoom.disable();
-
-    myMap.on('dblclick', e => {
-        if (currentLayer != undefined) {
-            currentLayer.remove();
-        }
-        var coordenadas = myMap.mouseEventToLatLng(e.originalEvent)
-        console.log(coordenadas)
-        currentLayer = L.marker([coordenadas.lat, coordenadas.lng]).addTo(myMap)
-        document.getElementsByName('latitud')[0].value = coordenadas.lat;
-        document.getElementsByName('longitud')[0].value = coordenadas.lng;
-    })
+    L.Routing.control({
+        waypoints: [
+            L.latLng(lat2, long2),
+            L.latLng(lat, long)
+        ],
+        routeWhileDragging: true
+    }).addTo(map);
 }
