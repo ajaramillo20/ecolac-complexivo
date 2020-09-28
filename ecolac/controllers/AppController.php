@@ -24,6 +24,11 @@ class AppController
         return $tipo->GetAllTipos();
     }
 
+    public static function GetEstados()
+    {
+        
+    }
+
     public static function GetCategorias()
     {
         require_once 'models/Categoria.php';
@@ -44,12 +49,31 @@ class AppController
         $pre = new Presentacion();
         return $pre->GetAllPresentaciones();
     }
-
-    public static function GetPagination($name)
+    
+    public static function GetPagination($name, $tamaño = 20)
     {
         require_once 'models/Paginacion.php';
+        require_once 'models/class/PaginacionResult.php';
+
         $pag = new Paginacion();
         $total = $pag->GetTotal($name);
+
+        $result = new PaginacionResult();
+        $result->Rows = $total;
+        $result->Paginas = ($total > 0) ? ceil(($total / $tamaño)) : 0;
+
+        return $result;
+    }
+
+    public static function GetPaginationList($list, $tamano = 20)
+    {
+        require_once 'models/class/PaginacionResult.php';
+
+        $result = new PaginacionResult();
+        $result->Rows = $list->num_rows;
+        $result->Paginas = ($result->Rows > 0) ? ceil(($result->Rows / $tamano)) : 0;
+
+        return $result;
     }
 
     public static function GetSucursales()
@@ -96,5 +120,15 @@ class AppController
         $dir = new Direccion();
         $dir->usr_id = $usrid;
         return $dir->GetDireccionPredeterminada();
+    }
+
+    public static function CastQueryResultToArray($result)
+    {
+        $array = [];
+        while($r = $result->fetch_object())
+        {
+            $array[] = $r;
+        }
+        return $array;
     }
 }

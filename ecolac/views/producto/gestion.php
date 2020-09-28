@@ -10,7 +10,40 @@
     }
     ?>
     <div class="contenedor">
-        <a class="btn" href="<?= base_url ?>producto/registrar">Agregar</a>
+        <a class="btn icon-plus" href="<?= base_url ?>producto/registrar">Agregar nuevo producto</a>
+        <section class="filters">
+
+            <label for="sucursales">Tipo:</label>
+            <select class="input-filter" name="sucursales" id="sucursales">
+                <option value="">
+                    Todos
+                </option>
+                <?php if (isset($sucursales)) : ?>
+                    <?php while ($suc = $sucursales->fetch_object()) : ?>
+
+                        <option value="<?= $suc->suc_id ?>" <?= isset($_SESSION['succonnect']) && $suc->suc_id == $_SESSION['succonnect']->suc_id ? 'selected' : ''; ?>>
+                            <?= $suc->ciu_nombre . ': ' . $suc->suc_nombre ?>
+                        </option>
+
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </select>
+            <label for="sucursales">Categoria:</label>
+            <select class="input-filter" name="sucursales" id="sucursales">
+                <option value="">
+                    Todos
+                </option>
+                <?php if (isset($sucursales)) : ?>
+                    <?php while ($suc = $sucursales->fetch_object()) : ?>
+
+                        <option value="<?= $suc->suc_id ?>" <?= isset($_SESSION['succonnect']) && $suc->suc_id == $_SESSION['succonnect']->suc_id ? 'selected' : ''; ?>>
+                            <?= $suc->ciu_nombre . ': ' . $suc->suc_nombre ?>
+                        </option>
+
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </select>
+        </section>
         <table>
             <thead>
                 <tr>
@@ -39,8 +72,8 @@
                         <td data-label="Stock"><?= $pro->pro_cantStock ?></td>
                         <td data-label="Ciudad"><?= $pro->ciu_nombre ?></td>
                         <td data-label="Sucursal"><?= $pro->suc_nombre ?></td>
-                        <td data-label="Editar"><a class="icon-pencil-neg" href="<?= base_url ?>producto/editar&id=<?= $pro->pro_id ?>"></a></td>
-                        <td data-label="Eliminar"><a onclick="return ConfirmDelete();" class="icon-trash btn-action" href="<?= base_url ?>producto/eliminar&id=<?= $pro->pro_id ?>"></a></td>
+                        <td data-label="Editar"><a class="icon-pencil-neg" href="<?= base_url ?>producto/editar&id=<?= $pro->pro_id ?>">Editar</a></td>
+                        <td data-label="Eliminar"><a onclick="return ConfirmDelete('<?= base_url ?>producto/eliminar&id=<?= $pro->pro_id ?>');" class="icon-trash btn-action" href="#">Eliminar</a></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

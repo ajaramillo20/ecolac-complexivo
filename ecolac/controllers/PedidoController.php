@@ -13,7 +13,7 @@ class PedidoController
     {
         $ped = new Pedido();
         $pedidos = $ped->GetAllPedidos();
-        require_once 'views/pedido/gestion.php';
+        require_once 'views/pedido/reporte.php';
     }
 
     public function pedidossucursal()
@@ -115,7 +115,7 @@ class PedidoController
                 if (!is_null($result)) {
                     $_SESSION['pedidoMisPedidosMensaje'] = 'Su pedido se guardo correctamente!';
                     App::UnsetSessionVar('carrito');
-                    App::Redirect('pedido/mispedidos');
+                    App::Redirect('pedido/detallepedido&id=' . $ped->ped_id);
                 } else {
                     $_SESSION['carritoIndexError'] = 'Intente realizar su pedido mas tarde!';
                     App::Redirect('carrito/index');
@@ -129,7 +129,25 @@ class PedidoController
 
     public function mispedidos()
     {
+        require_once 'models/Direccion.php';
+
+        $dir = new Direccion();
+        $dir->usr_id = $_SESSION['userconnect']->usr_id;
+
+        $pedidos = AppController::CastQueryResultToArray(AppController::GetPedidosByUsuarioId($_SESSION['userconnect']->usr_id));
+        $estados = PedidosEstatus::GetAllEstatus();
+        $direcciones = $dir->GetDireccionByUsuario();
+
         require_once 'views/pedido/mispedidos.php';
+    }
+
+    public function setMisPedidosAjaxParams()
+    {
+        $_SESSION['PEDARGS']->suc_id = isset($_GET['fec']) ? $_GET['fec'] : null;
+        $_SESSION['PEDARGS']->tip_id = isset($_GET['est']) ? $_GET['est'] : null;
+        $_SESSION['PEDARGS']->pro_nombre = isset($_GET['dir']) ? $_GET['dir'] : null;
+        $_SESSION['PEDARGS']->pro_nombre = isset($_GET['ped']) ? $_GET['ped'] : null;
+        $_SESSION['PEDARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
     }
 
     public function detallepedido()

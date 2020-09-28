@@ -53,7 +53,6 @@ class App
         throw new Exception("No tiene permitido este recurso");
     }
 
-
     public static function EstadisticasCarrito()
     {
         $datos = array(

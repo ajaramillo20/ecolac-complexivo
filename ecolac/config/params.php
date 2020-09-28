@@ -10,7 +10,8 @@ define("default_pantallas", array(
     'usuario/registroCompleto',
     'usuario/autenticacion',
     'categoria/tipo',
-    'usuario/perfil'
+    'usuario/perfil',
+    'producto/selectsucursal'
 ));
 define("logged_pantallas", array(
     'pedido/realizar',
@@ -23,9 +24,9 @@ define("logged_pantallas", array(
     'usuario/historialcompras',
     'pedido/detallepedido',
     'carrito/agregar',
+    'carrito/agregarAjax',
     'carrito/eliminar',
-    'carrito/index',
-    'producto/selectsucursal'
+    'carrito/index'
 ));
 define("products_path", 'files/images/productos');
 define("users_path", 'files/images/usuarios');

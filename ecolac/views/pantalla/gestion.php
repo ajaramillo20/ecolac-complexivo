@@ -1,5 +1,5 @@
 <div class="miTabla">
-    <h3>Gestion pantallas</h3>
+    <h3>Gestion transacciones de usuario</h3>
     <?php if (isset($_SESSION['pantallaGestionMensaje'])) {
         //echo '<p class="succes">' . $_SESSION['pantallaGestionMensaje'] . '</p>';
         App::UnsetSessionVar('pantallaGestionMensaje');
@@ -10,7 +10,7 @@
     }
     ?>
     <div class="contenedor">
-        <a class="btn" href="<?= base_url ?>pantalla/registrar">Agregar</a>
+        <a class="btn icon-plus" href="<?= base_url ?>pantalla/registrar">Agregar transacción a rol</a>
         <table>
             <thead>
                 <tr>
@@ -31,8 +31,8 @@
                         <td data-label="Ruta"><?= $pnt->pnt_vinculo ?></td>
                         <td data-label="Rol"><?= $pnt->rol_nombre ?></td>
                         <td data-label="Mostrar en menu"><?= $pnt->pnt_menu ?></td>
-                        <td data-label="Editar"><a class="icon-pencil-neg" href="<?= base_url ?>pantalla/editar&id=<?= $pnt->pnt_id ?>"></a></td>
-                        <td data-label="Eliminar"><a onclick="return ConfirmDelete();" class="icon-trash btn-action" href="<?= base_url ?>pantalla/eliminar&id=<?= $pnt->pnt_id ?>"></a></td>
+                        <td data-label="Editar"><a class="icon-pencil-neg" href="<?= base_url ?>pantalla/editar&id=<?= $pnt->pnt_id ?>">Editar</a></td>
+                        <td data-label="Eliminar"><a onclick="return ConfirmDelete('<?= base_url ?>pantalla/eliminar&id=<?= $pnt->pnt_id ?>');" class="icon-trash btn-action" href="#">Eliminar</a></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

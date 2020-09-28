@@ -1,0 +1,19 @@
+.contenedor-filtros{
+    padding:10px 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    width: 98%;
+    max-width: 500px;
+    margin: auto;    
+    border-radius: 7px;   
+}
+
+.contenedor-filtros input, select
+{
+    margin-bottom: 1px;
+    padding: 4px;
+    border-radius: 5px;
+    border: 1px solid darkgray; 
+}

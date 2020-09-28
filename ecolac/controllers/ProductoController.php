@@ -2,32 +2,46 @@
 
 require_once 'models/Producto.php';
 require_once 'models/Recurso.php';
-
 class ProductoController
 {
     public function index()
     {
         $sucursales = AppController::GetSucursales();
-        if (isset($_SESSION['succonnect']) && !is_null($_SESSION['succonnect'])) {
-            $pro = new Producto();
-            $pro->suc_id = $_SESSION['succonnect']->suc_id;
-            $productos = $pro->GetAllProductosBySucusal();
-            require_once 'views/producto/catalogo.php';
-        } 
-        else {
-            $pro = new Producto();
-            $productos = $pro->GetAllProductos();
-            require_once 'views/producto/catalogo.php';
-        }
+        $tipos = AppController::GetTipos();
+        $pro = new Producto();
+
+        $pro->suc_id = isset($_SESSION['succonnect']->suc_id) ? $_SESSION['succonnect']->suc_id : null;
+        $pro->tip_id = isset($_SESSION['PROARGS']->tip_id) ? $_SESSION['PROARGS']->tip_id : null;
+        $pro->pro_nombre = isset($_SESSION['PROARGS']->pro_nombre) ? $_SESSION['PROARGS']->pro_nombre : null;
+        $paginaActual = (isset($_SESSION['PROARGS']) && is_numeric($_SESSION['PROARGS']->pag)) ? $_SESSION['PROARGS']->pag : 1;
+
+        $productos = $pro->GetAllProductos();
+        $paginas = AppController::GetPaginationList($productos, 10);
+        $productos = AppController::CastQueryResultToArray($productos);
+
+        $productos = array_slice(
+            $productos,
+            (($paginaActual - 1) * 10),
+            10
+        );
+
+        require_once 'views/producto/catalogo.php';
+        APP::UnsetSessionVar('PROARGS');
     }
 
     public function selectsucursal()
     {
+        $_SESSION['PROARGS']->suc_id = isset($_GET['suc']) ? $_GET['suc'] : null;
+        $_SESSION['PROARGS']->tip_id = isset($_GET['cat']) ? $_GET['cat'] : null;
+        $_SESSION['PROARGS']->pro_nombre = isset($_GET['pro']) ? $_GET['pro'] : null;
+        $_SESSION['PROARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
         if (isset($_GET['suc'])) {
             $suc = AppController::GetSucursalById($_GET['suc']);
             if (!is_null($suc)) {
                 App::SetSucursalSession($suc);
             }
+        } else {
+            App::UnsetSessionVar('succonnect');
         }
     }
 
@@ -52,7 +66,6 @@ class ProductoController
             require_once 'views/producto/registro.php';
         }
     }
-
 
     public function actualizar()
     {

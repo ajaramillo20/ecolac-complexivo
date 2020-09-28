@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8" />
@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="<?= base_url ?>Recursos/css/estilos.css" />
     <script src="<?= base_url ?>Recursos/js/EcolacJS.js"></script>
     <script src="<?= base_url ?>Recursos/js/MyMap.js"></script>
+    <script src="<?= base_url ?>Recursos/js/notify.js"></script>
+    
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
@@ -34,7 +36,7 @@
     </header>
     <main>
         <section id="banner">
-            <img src="<?= base_url ?>Recursos/img/banner.jpg" />
+            <img alt="banner" src="<?= base_url ?>Recursos/img/banner.jpg" />
             <div class="contenedor">
                 <h2>ECOLAC</h2>
                 <p>Productos de calidad</p>

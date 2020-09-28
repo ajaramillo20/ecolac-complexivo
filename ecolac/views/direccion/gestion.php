@@ -12,7 +12,7 @@
         App::UnsetSessionVar('direccionGestionError');
     } ?>
     <div class="contenedor">
-        <a class="btn" href="<?= base_url . 'direccion/registro&usr=' . $entity->usr_id ?>">Agregar</a>
+        <a class="btn icon-home" href="<?= base_url . 'direccion/registro&usr=' . $entity->usr_id ?>">Agregar dirección</a>
         <table>
             <thead>
                 <tr>
@@ -34,8 +34,8 @@
                             <td data-label="Latitud"><?= $dir->dir_latitud ?></td>
                             <td data-label="Longitud"><?= $dir->dir_longitud ?></td>
                             <td data-label="Predeterminado"><?= $dir->dir_predeterminado ?></td>
-                            <td data-label="editar"><a class="icon-eye btn-action" href="<?= base_url . 'direccion/editar&dir=' . $dir->dir_id ?>"></a></td>
-                            <td data-label="eliminar"><a onclick="return ConfirmDelete('<?= base_url . 'direccion/eliminar&dir=' . $dir->dir_id ?>');" class="icon-trash btn-action"></a></td>
+                            <td data-label="editar"><a class="icon-eye btn-action" href="<?= base_url . 'direccion/editar&dir=' . $dir->dir_id ?>">Editar</a></td>
+                            <td data-label="eliminar"><a onclick="return ConfirmDelete('<?= base_url . 'direccion/eliminar&dir=' . $dir->dir_id ?>');" href="#" class="icon-trash btn-action">Eliminar</a></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

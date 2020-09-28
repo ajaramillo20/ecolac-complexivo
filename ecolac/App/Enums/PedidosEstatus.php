@@ -14,4 +14,9 @@ class PedidosEstatus
     {
         return "SELECT pes_id FROM statuspedido WHERE pes_nombre = '{$estado}'";
     }
+
+    public static function GetAllEstatus()
+    {
+        return array('Nuevo', 'Despachado', 'En Camino', 'Entregado', 'Cancelado', 'Rechazado');
+    }
 }

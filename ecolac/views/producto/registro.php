@@ -67,13 +67,18 @@
             <input type="number" step="1" name="stock" placeholder="Stock" required="true" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->pro_cantStock : ''; ?>" />
             <label>Imagen</label>
             <?php if (isset($entity) && !is_null($entity)) : ?>
-                <img id="imgPro" src="<?= base_url.$entity->rec_nombre ?>" />
+                <img id="imgPro" src="<?= base_url . $entity->rec_nombre ?>" />
             <?php endif; ?>
             <input type="file" name="imagen" <?= isset($entity) && !is_null($entity) ? '' : 'required="true"'; ?> class="input-100" />
 
             <input type="submit" value="Guardar" class="btn-enviar" />
         </div>
     </form>
+    <div class="miTabla">
+        <div class="contenedor">
+            <a class="btnaccion icon-angle-circled-left" href="#" onclick="GoBack();">Regresar</a>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">

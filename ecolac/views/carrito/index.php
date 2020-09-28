@@ -22,6 +22,7 @@
                         <th>Descripción</th>
                         <th>Precio</th>
                         <th>Unidades</th>
+                        <th>Total</th>
                         <!-- <th>Sucursal</th> -->
                         <th class="thAction">Añadir / Quitar</th>
                         <!-- <th class="thAction">Quitar</th> -->
@@ -38,6 +39,7 @@
                             <td data-label="Descripción"><?= $pro->tip_nombre . '-' . $pro->cat_nombre . '-' . $pro->pre_nombre ?></td>
                             <td data-label="Precio"><?= $pro->pro_valor ?></td>
                             <td data-label="Unidades"><?= $elemento['unidades'] ?></td>
+                            <td data-label="Total"><?= ($elemento['unidades'] * $pro->pro_valor) ?></td>
                             <!-- <td data-label="Sucursal"><?= $pro->suc_nombre ?></td> -->
                             <td data-label="Añadir/Quitar"><a href="<?= base_url . 'carrito/agregar&id=' . $pro->pro_id ?>" class="icon-carrito-agregar"></a></a>
                                 <a class="icon-carrito-quitar" href="<?= base_url ?>carrito/eliminar&id=<?= $pro->pro_id ?>"></td>
@@ -46,7 +48,7 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <a class="btn" href="<?= base_url . 'pedido/realizar' ?>"><?= 'Confirmar pedido por: ' . number_format($datos['total'], 2) . ' $' ?></a>
+            <a class="btn icon-money" href="<?= base_url . 'pedido/realizar' ?>"><?= 'Confirmar pedido por: ' . number_format($datos['total'], 2) . ' $' ?></a>
         </div>
     <?php else : ?>
         <h3>Nada por aquí...</h3>

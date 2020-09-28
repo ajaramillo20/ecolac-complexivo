@@ -38,7 +38,6 @@ class CarritoController
                         'producto' => $producto
                     );
                 }
-
                 App::Redirect('carrito/index');
             }
         } catch (\Throwable $th) {
@@ -47,8 +46,50 @@ class CarritoController
         }
     }
 
+
+    public function agregarAjax()
+    {
+        try {
+            if (isset($_GET['id'])) {
+                $pro_id = $_GET['id'];
+                $pro = new Producto();
+                $pro->pro_id = $_GET['id'];
+                $producto = $pro->GetProductoById();
+                $this->ValidarCarrito($producto);
+                $counter = 0;
+                if (isset($_SESSION['carrito'])) {
+                    foreach ($_SESSION['carrito'] as $indice => $elemento) {
+                        if ($elemento['pro_id'] == $producto->pro_id) {
+                            $_SESSION['carrito'][$indice]['unidades']++;
+                            $counter++;
+                        }
+                    }
+                }
+
+                if ($counter == 0) {
+                    $_SESSION['carrito'][] = array(
+                        'pro_id' => $producto->pro_id,
+                        'pro_valor' => $producto->pro_valor,
+                        'unidades' => 1,
+                        'producto' => $producto
+                    );
+                }
+                echo 'Correcto';
+            }
+        } catch (\Throwable $th) {            
+            echo $th->getMessage();
+        }
+    }
+
     private function ValidarCarrito($pro)
     {
+        if (!$this->ValidarItemsCarrito()) {
+            throw new Exception("No se puede pedir productos de distintas sucursales");
+        }
+        if (!isset($_SESSION['userconnect'])) {
+            throw new Exception("Inicia sesión para continuar");
+        }
+
         if (isset($_SESSION['succonnect'])) {
 
             if ($pro->suc_id != $_SESSION['succonnect']->suc_id) {
@@ -57,6 +98,11 @@ class CarritoController
         } else {
             throw new Exception("Regitre una dirección o seleccione una sucursal");
         }
+    }
+
+    private function ValidarItemsCarrito()
+    {
+        return true;
     }
 
     public function eliminar()
@@ -79,10 +125,6 @@ class CarritoController
                     }
                 }
             }
-
-
-
-
             App::Redirect('carrito/index');
         }
     }

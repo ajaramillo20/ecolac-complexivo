@@ -1,7 +1,5 @@
 <?php
-
-require_once 'models/IO/IOModel.php';
-class Usuario extends IOModel
+class Usuario
 {
 
     public $usr_id;

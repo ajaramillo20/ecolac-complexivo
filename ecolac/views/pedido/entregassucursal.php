@@ -8,7 +8,42 @@ if (isset($_SESSION['entregassucursalError'])) {
 }
 ?>
 <div class="miTabla">
-    <h2>Gestión entregas</h2>
+    <h2>Listado entregas</h2>
+    <section class="filters">
+        <label for="sucursales">Sucursal:</label>
+        <select class="input-filter" name="sucursales" id="sucursales">
+
+            <?php if (isset($sucursales)) : ?>
+                <?php while ($suc = $sucursales->fetch_object()) : ?>
+
+                    <option value="<?= $suc->suc_id ?>" <?= isset($_SESSION['succonnect']) && $suc->suc_id == $_SESSION['succonnect']->suc_id ? 'selected' : ''; ?>>
+                        <?= $suc->ciu_nombre . ': ' . $suc->suc_nombre ?>
+                    </option>
+
+                <?php endwhile; ?>
+            <?php endif; ?>
+
+        </select>
+
+        <label for="sucursales">Estado:</label>
+        <select class="input-filter" name="categorias" id="categorias">
+            <option value="">
+                Todos
+            </option>
+            <?php if (isset($tipos)) : ?>
+                <?php while ($tip = $tipos->fetch_object()) : ?>
+
+                    <option value="<?= $tip->tip_id ?>">
+                        <?= $tip->tip_nombre ?>
+                    </option>
+
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </select>
+
+        <label for="">Fecha</label>
+        <input type="date">
+    </section>
     <div class="contenedor">
         <table>
             <thead>
@@ -18,8 +53,10 @@ if (isset($_SESSION['entregassucursalError'])) {
                     <th>Fecha</th>
                     <th>Estado</th>
                     <th>Sucursal</th>
+                    <th>Repartidor</th>
                     <th>Dirección</th>
-                    <th class="thAction">Detalles / Gestionar</th>
+                    <th class="thAction">Detalles</th>
+                    <th class="thAction">Entregar</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,9 +68,10 @@ if (isset($_SESSION['entregassucursalError'])) {
                         <td data-label="FECHA"><?= StringFormat::DateFormat($ped->ped_fecha) ?></td>
                         <td data-label="ESTADO"><?= $ped->pes_nombre ?></td>
                         <td data-label="SUCURSAL"><?= $ped->suc_nombre ?></td>
+                        <td data-label="REPARTIDOR"><?= $ped->rep_nombre ?></td>
                         <td data-label="Dirección de entrega"><?= $ped->dir_direccion ?></td>
-                        <td data-label="Detalles"><a href="<?= base_url . 'pedido/detallepedido&id=' . $ped->ped_id ?>" class="icon-eye"></a>
-                            <a href="<?= base_url . 'pedido/gestionentrega&id=' . $ped->ped_id ?>" class="icon-paper-plane"></a></td>
+                        <td data-label="Detalles"><a href="<?= base_url . 'pedido/detallepedido&id=' . $ped->ped_id ?>" class="icon-eye">Detalles</a></td>
+                        <td data-label="Detalles"><a href="<?= base_url . 'pedido/gestionentrega&id=' . $ped->ped_id ?>" class="icon-paper-plane">Entregar</a></td>
                     </tr>
 
                 <?php endforeach; ?>

@@ -11,12 +11,22 @@ class Paginacion
 
     public function GetTotal($tableName)
     {
-        $sql = "SELECT COUNT(*) AS Total FROM " . $tableName;
+        $sql = "SELECT COUNT(*) AS TotalRows FROM " . $tableName;
         $result = $this->db->query($sql);
 
         if ($result) {
             $total = $result->fetch_object();
-            return $total->Total;
+            return $total->TotalRows;
+        }
+        return 0;
+    }
+
+    public function GetTotalByQuery($sql)
+    {
+        $result = $this->db->query($sql);
+        if ($result) {
+            $total = $result->num_rows;
+            return $total;
         }
         return 0;
     }

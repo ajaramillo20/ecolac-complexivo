@@ -1,7 +1,5 @@
 <?php
-require_once 'IO/IOModel.php';
-
-class Ciudad extends IOModel
+class Ciudad 
 {
     public $ciu_id;
     public $ciu_nombre;

@@ -36,7 +36,7 @@ class Pedido
 
             if ($result) {
                 $this->ped_id = $this->db->insert_id;
-                $result = $this->GuardarProductos();
+                $result = $this->ValidarStock();
                 $this->db->commit();
                 return $this;
             }
@@ -115,7 +115,7 @@ class Pedido
         return false;
     }
 
-    public function GuardarProductos()
+    public function ValidarStock()
     {
         $carrito = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : array();
         foreach ($carrito as $indice => $elemento) {
@@ -136,7 +136,7 @@ class Pedido
                     $resultUpdateStock = $this->db->query($sqlUpdateStock);
 
                     if (!$resultProPed || !$resultUpdateStock) {
-                        throw new Exception("El producto error al actualizar stock, intente mas tarde");
+                        throw new Exception("No se pudo realizar su pedido, intente mas tarde");
                     }
                 } else {
                     throw new Exception("El producto {$pro->pro_nombre} no se encuentra en stock, unidades disponibles {$stock}");
@@ -237,7 +237,7 @@ class Pedido
                 INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
                 INNER JOIN sucursal suc ON ped.suc_id = suc.suc_id
                 LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id                
-                LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id
+                LEFT JOIN usuario rep ON ped.usr_rep_id = rep.usr_id
                 WHERE suc.suc_id = {$this->suc_id}";
 
         $result = $this->db->query($sql);

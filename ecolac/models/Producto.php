@@ -40,20 +40,20 @@ class Producto
         return null;
     }
 
-    public function GetAllProductosBySucusal()
-    {
-        $sql = "SELECT * from producto pro
-                INNER JOIN recursos rec ON pro.rec_id = rec.rec_id
-                INNER JOIN tipo tip ON pro.tip_id = tip.tip_id
-                INNER JOIN categoria cat ON pro.cat_id = cat.cat_id
-                inner join presentacion pre ON pro.pre_id = pre.pre_id
-                inner join sucursal suc ON pro.suc_id = suc.suc_id
-                inner join direccion dir ON suc.dir_id = dir.dir_id
-                inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id
-                WHERE suc.suc_id = {$this->suc_id}";
-        $result = $this->db->query($sql);
-        return $result;
-    }
+    // public function GetAllProductosBySucusal()
+    // {
+    //     $sql = "SELECT * from producto pro
+    //             INNER JOIN recursos rec ON pro.rec_id = rec.rec_id
+    //             INNER JOIN tipo tip ON pro.tip_id = tip.tip_id
+    //             INNER JOIN categoria cat ON pro.cat_id = cat.cat_id
+    //             inner join presentacion pre ON pro.pre_id = pre.pre_id
+    //             inner join sucursal suc ON pro.suc_id = suc.suc_id
+    //             inner join direccion dir ON suc.dir_id = dir.dir_id
+    //             inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id
+    //             WHERE suc.suc_id = {$this->suc_id}";
+    //     $result = $this->db->query($sql);
+    //     return $result;
+    // }
 
     public function GetAllProductos()
     {
@@ -64,8 +64,19 @@ class Producto
                 inner join presentacion pre ON pro.pre_id = pre.pre_id
                 inner join sucursal suc ON pro.suc_id = suc.suc_id
                 inner join direccion dir ON suc.dir_id = dir.dir_id
-                inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id";
+                inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id
+                WHERE  (" . (StringFormat::IsNullOrEmptyString($this->suc_id) ? 'null' : "{$this->suc_id}") . " IS NULL
+                OR suc.suc_id =" . (StringFormat::IsNullOrEmptyString($this->suc_id) ? 'null' : "{$this->suc_id}") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->tip_id) ? 'null' : "{$this->tip_id}") . " IS NULL
+                OR tip.tip_id =" . (StringFormat::IsNullOrEmptyString($this->tip_id) ? 'null' : "{$this->tip_id}") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->pro_nombre) ? "'null'" : "'{$this->pro_nombre}'") . " = 'null'
+                OR pro.pro_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->pro_nombre) ? 'null' : "'%{$this->pro_nombre}%'") . ") 
+                ORDER BY pro.suc_id, pro.pro_id";
+
+
+
         $result = $this->db->query($sql);
+
         return $result;
     }
 

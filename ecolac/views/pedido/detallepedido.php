@@ -1,10 +1,10 @@
 <div class="miTabla">
     <?php if (isset($_SESSION['pedidoMisPedidosMensaje'])) {
-        echo '<p class="succes">' . $_SESSION['pedidoMisPedidosMensaje'] . '</p>';
+        App::ShowMessage($_SESSION['pedidoMisPedidosMensaje'], 'Pedido realizado!');
         App::UnsetSessionVar('pedidoMisPedidosMensaje');
     }
     if (isset($_SESSION['pedidoMisPedidosError'])) {
-        echo '<p class="error">' . $_SESSION['pedidoMisPedidosError'] . '</p>';
+        App::ShowMessage($_SESSION['pedidoMisPedidosMensaje'], 'Error');
         App::UnsetSessionVar('pedidoMisPedidosError');
     }
     if (!isset($entity) || is_null($entity)) {
@@ -34,6 +34,7 @@
                     <th>Producto</th>
                     <th>Valor</th>
                     <th>Unidades</th>
+                    <th>Total</th>
 
                 </tr>
             </thead>
@@ -43,14 +44,15 @@
                     <tr>
                         <td data-label="ID"><?= $pro->pro_id ?></td>
                         <td data-label="Nombre"><?= $pro->pro_nombre ?></td>
-                        <td data-label="COSTO"><?= $pro->pro_valor . ' $' ?></td>
+                        <td data-label="Valor"><?= $pro->pro_valor . ' $' ?></td>
                         <td data-label="Unidades"><?= $pro->prp_cantidad ?></td>
+                        <td data-label="Total"><?= number_format($pro->pro_valor * $pro->prp_cantidad, 2) ?></td>
                     </tr>
 
                 <?php endforeach; ?>
 
                 <tr>
-                    <td data-label="" colspan="3">TOTAL</td>
+                    <td data-label="" colspan="4">TOTAL</td>
                     <td data-label="TOTAL"><?= $entity->ped_costo . ' $' ?></td>
                 </tr>
             </tbody>
@@ -59,6 +61,12 @@
             <h2>Ubicación entrega</h2>
             <div id="myMap"></div>
         </div>
+    </div>
+</div>
+<br>
+<div class="miTabla">
+    <div class="contenedor">
+        <a class="btnaccion icon-angle-circled-left" href="<?= base_url . 'pedido/mispedidos' ?>">Regresar</a>
     </div>
 </div>
 

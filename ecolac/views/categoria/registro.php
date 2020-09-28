@@ -31,4 +31,10 @@
             <input type="submit" value="Guardar" class="btn-enviar" />
         </div>
     </form>
+
+    <div class="miTabla">
+        <div class="contenedor">
+            <a class="btnaccion icon-angle-circled-left" href="#" onclick="GoBack();">Regresar</a>
+        </div>
+    </div>
 </div>
