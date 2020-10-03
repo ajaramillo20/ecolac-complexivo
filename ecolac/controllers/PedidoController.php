@@ -134,19 +134,36 @@ class PedidoController
         $dir = new Direccion();
         $dir->usr_id = $_SESSION['userconnect']->usr_id;
 
-        $pedidos = AppController::CastQueryResultToArray(AppController::GetPedidosByUsuarioId($_SESSION['userconnect']->usr_id));
         $estados = PedidosEstatus::GetAllEstatus();
         $direcciones = $dir->GetDireccionByUsuario();
 
+        $ped = new Pedido();
+        $ped->usr_id = $_SESSION['userconnect']->usr_id;
+        $ped->ped_fecha = isset($_SESSION['PEDARGS']->ped_fecha) ? $_SESSION['PEDARGS']->ped_fecha : null;
+        $ped->pes_id = isset($_SESSION['PEDARGS']->pes_id) ? $_SESSION['PEDARGS']->pes_id : null;
+        $ped->dir_id = isset($_SESSION['PEDARGS']->dir_id) ? $_SESSION['PEDARGS']->dir_id : null;
+        $ped->ped_id = isset($_SESSION['PEDARGS']->ped_id) ? $_SESSION['PEDARGS']->ped_id : null;
+
+        $paginaActual = (isset($_SESSION['PEDARGS']) && is_numeric($_SESSION['PEDARGS']->pag)) ? $_SESSION['PEDARGS']->pag : 1;
+
+        $pedidos = $ped->GetAllPedidos();
+        $paginas = AppController::GetPaginationListArray($pedidos, 5);
+        $pedidos = array_slice(
+            $pedidos,
+            (($paginaActual - 1) * 5),
+            5
+        );
+
         require_once 'views/pedido/mispedidos.php';
+        App::UnsetSessionVar('PEDARGS');
     }
 
     public function setMisPedidosAjaxParams()
     {
-        $_SESSION['PEDARGS']->suc_id = isset($_GET['fec']) ? $_GET['fec'] : null;
-        $_SESSION['PEDARGS']->tip_id = isset($_GET['est']) ? $_GET['est'] : null;
-        $_SESSION['PEDARGS']->pro_nombre = isset($_GET['dir']) ? $_GET['dir'] : null;
-        $_SESSION['PEDARGS']->pro_nombre = isset($_GET['ped']) ? $_GET['ped'] : null;
+        $_SESSION['PEDARGS']->ped_fecha = isset($_GET['fec']) ? $_GET['fec'] : null;
+        $_SESSION['PEDARGS']->pes_id = isset($_GET['est']) ? $_GET['est'] : null;
+        $_SESSION['PEDARGS']->dir_id = isset($_GET['dir']) ? $_GET['dir'] : null;
+        $_SESSION['PEDARGS']->ped_id = isset($_GET['ped']) ? $_GET['ped'] : null;
         $_SESSION['PEDARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
     }
 

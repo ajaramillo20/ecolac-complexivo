@@ -204,15 +204,27 @@ class Pedido
 
     public function GetAllPedidos()
     {
-        $sql = "SELECT ped.ped_id, ped.ped_fecha, usr.usr_nombre, pes.pes_nombre,
-                dir.dir_direccion, ven.usr_nombre AS ven_nombre,
+        $sql = "SELECT ped.ped_id, ped.ped_fecha, usr.usr_nombre, pes.pes_nombre,ped.ped_costo,
+                dir.dir_direccion, ven.usr_nombre AS ven_nombre, ciu.ciu_nombre,
                 rep.usr_nombre as rep_nombre, suc.suc_id, suc.suc_nombre FROM pedido ped
                 INNER JOIN usuario usr ON ped.usr_id = usr.usr_id
                 INNER JOIN direccion dir ON ped.dir_id = dir.dir_id
+                INNER JOIN ciudad ciu on dir.ciu_id = ciu.ciu_id
                 INNER JOIN statuspedido pes ON ped.pes_id = pes.pes_id
                 INNER JOIN sucursal suc ON ped.suc_id = suc.suc_id
                 LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id                
-                LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id";
+                LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id     
+                WHERE (" . (StringFormat::IsNullOrEmptyString($this->usr_id) ? 'null' : "{$this->usr_id}") . " IS NULL
+                OR usr.usr_id =" . (StringFormat::IsNullOrEmptyString($this->usr_id) ? 'null' : "{$this->usr_id}") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->dir_id) ? 'null' : "{$this->dir_id}") . " IS NULL
+                OR dir.dir_id =" . (StringFormat::IsNullOrEmptyString($this->dir_id) ? 'null' : "{$this->dir_id}") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_id) ? 'null' : "{$this->ped_id}") . " IS NULL
+                OR ped.ped_id =" . (StringFormat::IsNullOrEmptyString($this->ped_id) ? 'null' : "{$this->ped_id}") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? "null" : "{$this->ped_fecha}") . " IS NULL
+                OR ped.ped_fecha >=" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? 'null' : "'{$this->ped_fecha}'") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->pes_id) ? "'null'" : "'{$this->pes_id}'") . " = 'null'
+                OR pes.pes_nombre = " . (StringFormat::IsNullOrEmptyString($this->pes_id) ? 'null' : "'{$this->pes_id}'") . ") 
+                ORDER BY ped.ped_id, ped.ped_fecha, pes.pes_nombre";
 
         $result = $this->db->query($sql);
 
@@ -223,7 +235,6 @@ class Pedido
             }
             return $pedidosResult;
         }
-
         return null;
     }
 

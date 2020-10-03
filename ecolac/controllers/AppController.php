@@ -76,6 +76,17 @@ class AppController
         return $result;
     }
 
+    public static function GetPaginationListArray($list, $tamano = 20)
+    {
+        require_once 'models/class/PaginacionResult.php';
+
+        $result = new PaginacionResult();
+        $result->Rows = count($list);
+        $result->Paginas = ($result->Rows > 0) ? ceil(($result->Rows / $tamano)) : 0;
+
+        return $result;
+    }
+
     public static function GetSucursales()
     {
         require_once 'models/Sucursal.php';
