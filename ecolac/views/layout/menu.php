@@ -6,7 +6,6 @@ if (isset($_SESSION['userconnect'])) {
 
 ?>
 
-<a href="<?= base_url ?>">Inicio</a>
 <a href="<?= base_url ?>">Productos</a>
 <?php if (!isset($_SESSION['userconnect'])) : ?>
 

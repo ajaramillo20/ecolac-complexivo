@@ -26,8 +26,16 @@ class Usuario
     public function GetAllUsuarios()
     {
         $sql = "SELECT usr.usr_id, usr.usr_nombre, usr.usr_correo, usr.usr_cedula, usr.usr_telefono, rol.rol_nombre FROM usuario usr
-        INNER JOIN rol rol on usr.rol_id = rol.rol_id";
+        INNER JOIN rol rol on usr.rol_id = rol.rol_id
+        WHERE  (" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . " IS NULL
+                OR rol.rol_id =" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . ") " .
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? 'null' : "{$this->usr_nombre}") . " IS NULL
+                OR usr.usr_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? "'null'" : "'%{$this->usr_nombre}%'") . ") " .
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? "'null'" : "'{$this->usr_correo}'") . " = 'null'
+                OR usr.usr_correo LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? 'null' : "'%{$this->usr_correo}%'") . ") 
+                ORDER BY rol.rol_nombre, usr.usr_nombre";
         $usuarios = $this->db->query($sql);
+
         return $usuarios;
     }
 

@@ -14,8 +14,31 @@ class UsuarioController
     public function gestion()
     {
         $usr = new Usuario();
+        $usr->rol_id = isset($_SESSION['USRARGS']->rol) ? $_SESSION['USRARGS']->rol : null;
+        $usr->usr_nombre = isset($_SESSION['USRARGS']->nombre) ? $_SESSION['USRARGS']->nombre : null;
+        $usr->usr_correo = isset($_SESSION['USRARGS']->correo) ? $_SESSION['USRARGS']->correo : null;
+
+        $paginaActual = (isset($_SESSION['USRARGS']->pag) && is_numeric($_SESSION['USRARGS']->pag)) ? $_SESSION['USRARGS']->pag : 1;
+        $roles = AppController::GetRoles();
         $usuarios = $usr->GetAllUsuarios();
+        $usuarios = AppController::CastQueryResultToArray($usuarios);
+        $paginas = AppController::GetPaginationListArray($usuarios, 5);
+        $usuarios = array_slice(
+            $usuarios,
+            (($paginaActual - 1) * 5),
+            5
+        );
+
         require_once 'views/usuario/gestion.php';
+        App::UnsetSessionVar('USRARGS');
+    }
+
+    public function SeUsrGestionAjax()
+    {
+        $_SESSION['USRARGS']->rol = isset($_GET['rol']) ? $_GET['rol'] : null;
+        $_SESSION['USRARGS']->nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
+        $_SESSION['USRARGS']->correo = isset($_GET['correo']) ? $_GET['correo'] : null;
+        $_SESSION['USRARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
     }
 
     public function registrar()

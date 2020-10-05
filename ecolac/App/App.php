@@ -201,4 +201,13 @@ class App
             throw new Exception("Esta dirección pertenece a otra ciudad, seleccione otra dirección u otra sucursal");
         }
     }
+
+    public static function GroupArrayBy($array, $key)
+    {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return; 
+    }
 }

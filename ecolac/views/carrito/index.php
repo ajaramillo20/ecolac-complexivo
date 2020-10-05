@@ -1,5 +1,4 @@
 <div class="miTabla">
-    <h3>Productos en carrito</h3>
     <?php if (isset($_SESSION['carritoIndexMensaje'])) {
         App::ShowMessage($_SESSION['carritoIndexMensaje'], 'Confirmación');
         App::UnsetSessionVar('carritoIndexMensaje');
@@ -8,9 +7,9 @@
         App::ShowMessage($_SESSION['carritoIndexError'], 'Error');
         App::UnsetSessionVar('carritoIndexError');
     }
-    $datos = App::EstadisticasCarrito()
+    $datos = App::EstadisticasCarrito();
     ?>
-
+    <h3><?= isset($datos['count']) ? "Productos en carrito ({$datos['count']})" : "Productos en carrito"; ?></h3>
     <?php if ($datos['count'] > 0) : ?>
         <div class="contenedor">
             <table>
@@ -20,6 +19,7 @@
                         <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Sucursal</th>
                         <th>Precio</th>
                         <th>Unidades</th>
                         <th>Total</th>
@@ -37,7 +37,8 @@
                             <td data-label="imagen"><img src="<?= base_url . $pro->rec_nombre ?>" /></td>
                             <td data-label="Nombre"><?= $pro->pro_nombre ?></td>
                             <td data-label="Descripción"><?= $pro->tip_nombre . '-' . $pro->cat_nombre . '-' . $pro->pre_nombre ?></td>
-                            <td data-label="Precio"><?= $pro->pro_valor ?></td>
+                            <td data-label="Sucursal"><?= $pro->suc_nombre ?></td>
+                            <td data-label="Precio"><?= $pro->pro_valor . ' $' ?></td>
                             <td data-label="Unidades"><?= $elemento['unidades'] ?></td>
                             <td data-label="Total"><?= ($elemento['unidades'] * $pro->pro_valor) ?></td>
                             <!-- <td data-label="Sucursal"><?= $pro->suc_nombre ?></td> -->

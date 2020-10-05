@@ -33,6 +33,7 @@ class CarritoController
                 if ($counter == 0) {
                     $_SESSION['carrito'][] = array(
                         'pro_id' => $producto->pro_id,
+                        'suc_id' => $producto->suc_id,
                         'pro_valor' => $producto->pro_valor,
                         'unidades' => 1,
                         'producto' => $producto
@@ -69,6 +70,7 @@ class CarritoController
                 if ($counter == 0) {
                     $_SESSION['carrito'][] = array(
                         'pro_id' => $producto->pro_id,
+                        'suc_id' => $producto->suc_id,
                         'pro_valor' => $producto->pro_valor,
                         'unidades' => 1,
                         'producto' => $producto
@@ -76,18 +78,22 @@ class CarritoController
                 }
                 echo 'Correcto';
             }
-        } catch (\Throwable $th) {            
+        } catch (\Throwable $th) {
             echo $th->getMessage();
         }
     }
 
     private function ValidarCarrito($pro)
     {
-        if (!$this->ValidarItemsCarrito()) {
+        if (!$this->ValidarItemsCarrito($pro)) {
             throw new Exception("No se puede pedir productos de distintas sucursales");
         }
         if (!isset($_SESSION['userconnect'])) {
             throw new Exception("Inicia sesión para continuar");
+        }
+
+        if ($pro->pro_cantStock <= 0) {
+            throw new Exception("Este producto no se encuentra en stock.");
         }
 
         if (isset($_SESSION['succonnect'])) {
@@ -100,8 +106,13 @@ class CarritoController
         }
     }
 
-    private function ValidarItemsCarrito()
+    private function ValidarItemsCarrito($pro)
     {
+        foreach ($_SESSION['carrito'] as $indice => $elemento) {
+            if ($_SESSION['carrito'][$indice]['producto']->suc_id != $pro->suc_id) {
+                return false;
+            }
+        }
         return true;
     }
 
