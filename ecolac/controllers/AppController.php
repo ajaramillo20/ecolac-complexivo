@@ -26,7 +26,6 @@ class AppController
 
     public static function GetEstados()
     {
-        
     }
 
     public static function GetCategorias()
@@ -49,7 +48,7 @@ class AppController
         $pre = new Presentacion();
         return $pre->GetAllPresentaciones();
     }
-    
+
     public static function GetPagination($name, $tamaño = 20)
     {
         require_once 'models/Paginacion.php';
@@ -136,9 +135,10 @@ class AppController
     public static function CastQueryResultToArray($result)
     {
         $array = [];
-        while($r = $result->fetch_object())
-        {
-            $array[] = $r;
+        if ($result) {
+            while ($r = $result->fetch_object()) {
+                $array[] = $r;
+            }
         }
         return $array;
     }

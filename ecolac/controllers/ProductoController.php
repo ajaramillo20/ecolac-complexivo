@@ -47,9 +47,37 @@ class ProductoController
 
     public function gestion()
     {
+
+        $sucursales = AppController::GetSucursales();
+        $tipos = AppController::GetTipos();
+
         $pro = new Producto();
+
+        $pro->suc_id = isset($_SESSION['PROGARGS']->suc_id) ? $_SESSION['PROGARGS']->suc_id : null;
+        $pro->tip_id = isset($_SESSION['PROGARGS']->tip_id) ? $_SESSION['PROGARGS']->tip_id : null;
+        $pro->pro_nombre = isset($_SESSION['PROGARGS']->pro_nombre) ? $_SESSION['PROGARGS']->pro_nombre : null;
+        $paginaActual = (isset($_SESSION['PROGARGS']) && is_numeric($_SESSION['PROGARGS']->pag)) ? $_SESSION['PROGARGS']->pag : 1;
+
         $productos = $pro->GetAllProductos();
+        $paginas = AppController::GetPaginationList($productos, 10);
+        $productos = AppController::CastQueryResultToArray($productos);
+
+        $productos = array_slice(
+            $productos,
+            (($paginaActual - 1) * 10),
+            10
+        );
+
         require_once 'views/producto/gestion.php';
+        APP::UnsetSessionVar('PROGARGS');
+    }
+
+    public function selectProAjaxArgs()
+    {
+        $_SESSION['PROGARGS']->suc_id = isset($_GET['suc']) ? $_GET['suc'] : null;
+        $_SESSION['PROGARGS']->tip_id = isset($_GET['cat']) ? $_GET['cat'] : null;
+        $_SESSION['PROGARGS']->pro_nombre = isset($_GET['pro']) ? $_GET['pro'] : null;
+        $_SESSION['PROGARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
     }
 
     public function registrar()

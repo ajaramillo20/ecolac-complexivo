@@ -7,8 +7,33 @@ class PantallaController
     public function gestion()
     {
         $pnt = new Pantalla();
+        $roles = AppController::GetRoles();
+
+        $pnt->rol_id = isset($_SESSION['PANARGS']->rol_id) ? $_SESSION['PANARGS']->rol_id : null;
+        $pnt->pnt_vinculo = isset($_SESSION['PANARGS']->ruta) ? $_SESSION['PANARGS']->ruta : null;
+
+        $paginaActual = (isset($_SESSION['PROGARGS']) && is_numeric($_SESSION['PROGARGS']->pag)) ? $_SESSION['PROGARGS']->pag : 1;
+
         $pantallas = $pnt->GetAllPantallas();
+        $paginas = AppController::GetPaginationList($pantallas, 10);
+        $pantallas = AppController::CastQueryResultToArray($pantallas);
+
+        $pantallas = array_slice(
+            $pantallas,
+            (($paginaActual - 1) * 10),
+            10
+        );
+
         require_once 'views/pantalla/gestion.php';
+        App::UnsetSessionVar('PANARGS');
+    }
+
+    public function setGestionAjaxArgs()
+    {
+        $_SESSION['PANARGS']->rol_id = isset($_GET['rol']) ? $_GET['rol'] : null;
+        $_SESSION['PANARGS']->ruta = isset($_GET['ruta']) ? $_GET['ruta'] : null;
+        $_SESSION['PANARGS']->pag = isset($_GET['ruta']) ? $_GET['ruta'] : null;
+        $_SESSION['PROGARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
     }
 
     public function registrar()

@@ -43,7 +43,7 @@
     </div>
 
     <div class="contenedor">
-        <a class="btn icon-user-plus" href="<?= base_url ?>usuario/registro">Agregar nuevo usuario</a>
+        <a class="btn icon-user-plus" href="<?= base_url . 'usuario/nuevousuario' ?>">Agregar nuevo usuario</a>
 
         <table>
             <thead>

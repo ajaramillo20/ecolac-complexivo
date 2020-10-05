@@ -67,11 +67,11 @@ class Producto
                 inner join ciudad ciu ON dir.ciu_id = ciu.ciu_id
                 WHERE  (" . (StringFormat::IsNullOrEmptyString($this->suc_id) ? 'null' : "{$this->suc_id}") . " IS NULL
                 OR suc.suc_id =" . (StringFormat::IsNullOrEmptyString($this->suc_id) ? 'null' : "{$this->suc_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->tip_id) ? 'null' : "{$this->tip_id}") . " IS NULL
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->tip_id) ? 'null' : "{$this->tip_id}") . " IS NULL
                 OR tip.tip_id =" . (StringFormat::IsNullOrEmptyString($this->tip_id) ? 'null' : "{$this->tip_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->pro_nombre) ? "'null'" : "'{$this->pro_nombre}'") . " = 'null'
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->pro_nombre) ? "'null'" : "'{$this->pro_nombre}'") . " = 'null'
                 OR pro.pro_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->pro_nombre) ? 'null' : "'%{$this->pro_nombre}%'") . ") 
-                ORDER BY pro.suc_id, pro.pro_id";
+                ORDER BY pro.suc_id, pro.pro_nombre";
 
 
 

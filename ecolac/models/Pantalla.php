@@ -84,7 +84,14 @@ class Pantalla
     public function GetAllPantallas()
     {
         $sql = "SELECT pnt.pnt_id, pnt.pnt_nombre, pnt.pnt_vinculo, pnt.pnt_menu, rol.rol_nombre FROM pantallarol pnt
-                INNER JOIN rol rol on pnt.rol_id = rol.rol_id ORDER BY rol.rol_nombre, pnt.pnt_vinculo";
+                INNER JOIN rol rol on pnt.rol_id = rol.rol_id
+                WHERE  (" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . " IS NULL
+                OR rol.rol_id =" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . ") " .
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->pnt_vinculo) ? "'null'" : "'{$this->pnt_vinculo}'") . " = 'null'
+                OR pnt.pnt_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->pnt_vinculo) ? 'null' : "'%{$this->pnt_vinculo}%'") . ") 
+                ORDER BY rol.rol_nombre, pnt.pnt_nombre";
+
+
         $pantallas = $this->db->query($sql);
         return $pantallas;
     }

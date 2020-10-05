@@ -65,6 +65,7 @@
                     <th>Costo</th>
                     <th>Estado</th>
                     <th>Direccion de entrega</th>
+                    <th>Sucursal</th>
                     <th>Ciudad</th>
                     <th class="thAction">Detalles</th>
                 </tr>
@@ -77,6 +78,7 @@
                         <td data-label="COSTO"><?= $ped->ped_costo ?></td>
                         <td data-label="ESTADO"><?= $ped->pes_nombre ?></td>
                         <td data-label="Dirección de entrega"><?= $ped->dir_direccion ?></td>
+                        <td data-label="Sucursal"><?= $ped->suc_nombre ?></td>
                         <td data-label="Ciudad"><?= $ped->ciu_nombre ?></td>
                         <td data-label="Detalles"><a href="<?= base_url . 'pedido/detallepedido&id=' . $ped->ped_id ?>" class="icon-eye"></a></td>
                     </tr>

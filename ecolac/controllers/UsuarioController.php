@@ -170,6 +170,35 @@ class UsuarioController
         }
     }
 
+    public function nuevousuario()
+    {
+        require_once 'views/usuario/nuevousuario.php';
+    }
+
+    public function agregarusuario()
+    {
+        try {
+            $usr = new Usuario();
+
+            $usr->usr_nombre = $_POST['nombre'];
+            $usr->usr_cedula = $_POST['cedula'];
+            $usr->usr_correo = $_POST['correo'];
+            $usr->usr_telefono = $_POST['telefono'];
+            $usr->usr_usuario = $_POST['usuario'];
+            $usr->usr_contrasena = $_POST['contrasena'];
+            $usr->rol_id = $_POST['rol'];
+            $usr->suc_id = $_POST['sucursal'];
+
+            $usr->GuardarUsuarioSistema();
+
+            $_SESSION['usuarioGestionMensaje'] = 'Usuario agregado correctamente!';
+            App::Redirect('usuario/gestion');
+        } catch (\Throwable $th) {
+            $_SESSION['usuarioGestionError'] = $th->getMessage();
+            App::Redirect('usuario/gestion');
+        }
+    }
+
     public function eliminar()
     {
         if (isset($_GET['id'])) {

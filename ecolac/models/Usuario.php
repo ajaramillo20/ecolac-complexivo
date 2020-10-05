@@ -29,8 +29,8 @@ class Usuario
         INNER JOIN rol rol on usr.rol_id = rol.rol_id
         WHERE  (" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . " IS NULL
                 OR rol.rol_id =" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . ") " .
-            "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? 'null' : "{$this->usr_nombre}") . " IS NULL
-                OR usr.usr_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? "'null'" : "'%{$this->usr_nombre}%'") . ") " .
+                "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? "'null'" : "'{$this->usr_nombre}'") . " = 'null'
+                OR usr.usr_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? 'null' : "'%{$this->usr_nombre}%'")  . ") " .
             "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? "'null'" : "'{$this->usr_correo}'") . " = 'null'
                 OR usr.usr_correo LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? 'null' : "'%{$this->usr_correo}%'") . ") 
                 ORDER BY rol.rol_nombre, usr.usr_nombre";
@@ -181,6 +181,25 @@ class Usuario
             }
         }
         return null;
+    }
+
+    public function GuardarUsuarioSistema()
+    {
+        if ($this->UserExist()) {
+            throw new Exception('Ya existe un usuario con esos datos');
+        }
+
+        $this->usr_contrasena = App::GetHash($this->usr_contrasena);
+        $sql = "INSERT INTO usuario (usr_nombre, usr_cedula, usr_correo, usr_telefono, usr_usuario, usr_contrasena, suc_id, rol_id)
+                VALUES ('{$this->usr_nombre}', '{$this->usr_cedula}', '{$this->usr_correo}', '{$this->usr_telefono}', '{$this->usr_usuario}', '{$this->usr_contrasena}' 
+                , {$this->suc_id}, {$this->rol_id})";
+
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            return true;
+        }
+        throw new Exception('Error al registrar usuario');
     }
 
     public function UserExist()

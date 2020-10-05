@@ -98,9 +98,9 @@ class CarritoController
 
         if (isset($_SESSION['succonnect'])) {
 
-            if ($pro->suc_id != $_SESSION['succonnect']->suc_id) {
-                throw new Exception("Este producto no es de la sucursal seleccionada");
-            }
+            // if ($pro->suc_id != $_SESSION['succonnect']->suc_id) {
+            //     throw new Exception("Este producto no es de la sucursal seleccionada");
+            // }
         } else {
             throw new Exception("Regitre una dirección o seleccione una sucursal");
         }
@@ -108,9 +108,11 @@ class CarritoController
 
     private function ValidarItemsCarrito($pro)
     {
-        foreach ($_SESSION['carrito'] as $indice => $elemento) {
-            if ($_SESSION['carrito'][$indice]['producto']->suc_id != $pro->suc_id) {
-                return false;
+        if (isset($_SESSION['carrito'])) {
+            foreach ($_SESSION['carrito'] as $indice => $elemento) {
+                if ($_SESSION['carrito'][$indice]['producto']->suc_id != $pro->suc_id) {
+                    return false;
+                }
             }
         }
         return true;
