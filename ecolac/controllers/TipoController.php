@@ -37,4 +37,51 @@ class TipoController
             }
         }
     }
+
+    public function actualizar()
+    {
+        try {
+            $id = $_POST['id'];
+            $nombre = $_POST['nombre'];
+
+            $tip = new Tipo();
+            $tip->tip_id = $id;
+            $tip->tip_nombre = $nombre;
+
+            $tip->UpdateTipo();
+            $_SESSION['tipoGestionMensaje'] = 'Registro actualizado!';
+            App::Redirect('tipo/gestion');
+        } catch (\Throwable $th) {
+            $_SESSION['tipoGestionError'] = $th->getMessage();
+            App::Redirect('tipo/gestion');
+        }
+    }
+
+    public function eliminar()
+    {
+        try {
+            $id = $_GET['id'];
+            $tip = new Tipo();
+            $tip->tip_id = $id;
+            $tip->DeleteTipo();
+
+            $_SESSION['tipoGestionMensaje'] = 'Registro eliminado!';
+            App::Redirect('tipo/gestion');
+        } catch (\Throwable $th) {
+            $_SESSION['tipoGestionError'] = $th->getMessage();
+            App::Redirect('tipo/gestion');
+        }
+    }
+
+    public function editar()
+    {
+        $id = $_GET['id'];
+
+        $tip = new Tipo();
+        $tip->tip_id = $id;
+
+        $entity = $tip->GetTipoById();
+
+        require_once 'views/tipo/registro.php';
+    }
 }
