@@ -13,17 +13,18 @@ if (isset($_SESSION['userconnect'])) {
 
 <div class="contenedor div-form">
 
-    <form action="<?= base_url . 'usuario/actualizarperfil' ?>" class="form-registro" enctype="multipart/form-data" method="POST">
+    <form action="<?= base_url . 'usuario/actualizarperfil' ?>" class="form-registro" method="POST">
         <div class="redondos info-redondo">
             <img src=<?= base_url . "Recursos/img/ecolacLogo.jpg" ?> />
 
             <div id="div_file">
                 <h4 class="icon-pencil-neg">Cambiar foto de perfil
                 </h4>
-                <input class="inputImagen" type="file" />
+                <!-- <input class="inputImagen" type="file" /> -->
             </div>
         </div>
         <div class="contenedor-inputs">
+            <input hidden type="text" name="id" placeholder="id" required value="<?= isset($entity) ? $entity->usr_id : '' ?>" class="input-100" />
             <label for="nombre">Nombre</label>
             <input type="text" name="nombre" placeholder="Nombre" required value="<?= isset($entity) ? $entity->usr_nombre : '' ?>" class="input-100" />
             <label for="usuario">Usuario</label>

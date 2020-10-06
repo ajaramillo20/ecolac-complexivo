@@ -216,13 +216,13 @@ class Pedido
                 LEFT JOIN usuario rep ON ped.usr_ven_id = rep.usr_id     
                 WHERE (" . (StringFormat::IsNullOrEmptyString($this->usr_id) ? 'null' : "{$this->usr_id}") . " IS NULL
                 OR usr.usr_id =" . (StringFormat::IsNullOrEmptyString($this->usr_id) ? 'null' : "{$this->usr_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->dir_id) ? 'null' : "{$this->dir_id}") . " IS NULL
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->dir_id) ? 'null' : "{$this->dir_id}") . " IS NULL
                 OR dir.dir_id =" . (StringFormat::IsNullOrEmptyString($this->dir_id) ? 'null' : "{$this->dir_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_id) ? 'null' : "{$this->ped_id}") . " IS NULL
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_id) ? 'null' : "{$this->ped_id}") . " IS NULL
                 OR ped.ped_id =" . (StringFormat::IsNullOrEmptyString($this->ped_id) ? 'null' : "{$this->ped_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? "null" : "{$this->ped_fecha}") . " IS NULL
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? "null" : "{$this->ped_fecha}") . " IS NULL
                 OR ped.ped_fecha >=" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? 'null' : "'{$this->ped_fecha}'") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->pes_id) ? "'null'" : "'{$this->pes_id}'") . " = 'null'
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->pes_id) ? "'null'" : "'{$this->pes_id}'") . " = 'null'
                 OR pes.pes_nombre = " . (StringFormat::IsNullOrEmptyString($this->pes_id) ? 'null' : "'{$this->pes_id}'") . ") 
                 ORDER BY ped.ped_id, ped.ped_fecha, pes.pes_nombre";
 
@@ -249,7 +249,14 @@ class Pedido
                 INNER JOIN sucursal suc ON ped.suc_id = suc.suc_id
                 LEFT JOIN usuario ven ON ped.usr_ven_id = ven.usr_id                
                 LEFT JOIN usuario rep ON ped.usr_rep_id = rep.usr_id
-                WHERE suc.suc_id = {$this->suc_id}";
+                WHERE suc.suc_id = {$this->suc_id} 
+                AND (" . (StringFormat::IsNullOrEmptyString($this->usr_id) ? "'null'" : "'{$this->usr_id}'") . " = 'null'
+                OR usr.usr_nombre like " . (StringFormat::IsNullOrEmptyString($this->usr_id) ? 'null' : "'%{$this->usr_id}%'")  . ") " .
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? "null" : "{$this->ped_fecha}") . " IS NULL
+                OR ped.ped_fecha >=" . (StringFormat::IsNullOrEmptyString($this->ped_fecha) ? 'null' : "'{$this->ped_fecha}'") . ") " .
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->pes_id) ? "'null'" : "'{$this->pes_id}'") . " = 'null'
+                OR pes.pes_nombre = " . (StringFormat::IsNullOrEmptyString($this->pes_id) ? 'null' : "'{$this->pes_id}'") . ") 
+                ORDER BY ped.ped_id, ped.ped_fecha, pes.pes_nombre";
 
         $result = $this->db->query($sql);
 

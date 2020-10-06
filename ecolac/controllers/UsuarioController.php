@@ -166,7 +166,17 @@ class UsuarioController
     public function actualizarperfil()
     {
         if (isset($_POST)) {
-            //var_dump($_POST);
+
+
+            $usr = new Usuario();
+            $usr->usr_id = $_POST['id'];
+            $usr->usr_nombre = $_POST['nombre'];
+            $usr->usr_correo = $_POST['correo'];
+            $usr->usr_telefono = $_POST['telefono'];
+            $usr->usr_usuario = $_POST['usuario'];
+            $usr->usr_contrasena = $_POST['contrasena'];
+
+            $result = $usr->ActualizarPerfilUsuario();
         }
     }
 

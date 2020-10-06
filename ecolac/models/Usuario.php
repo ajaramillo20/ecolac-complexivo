@@ -29,7 +29,7 @@ class Usuario
         INNER JOIN rol rol on usr.rol_id = rol.rol_id
         WHERE  (" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . " IS NULL
                 OR rol.rol_id =" . (StringFormat::IsNullOrEmptyString($this->rol_id) ? 'null' : "{$this->rol_id}") . ") " .
-                "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? "'null'" : "'{$this->usr_nombre}'") . " = 'null'
+            "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? "'null'" : "'{$this->usr_nombre}'") . " = 'null'
                 OR usr.usr_nombre LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_nombre) ? 'null' : "'%{$this->usr_nombre}%'")  . ") " .
             "AND (" . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? "'null'" : "'{$this->usr_correo}'") . " = 'null'
                 OR usr.usr_correo LIKE " . (StringFormat::IsNullOrEmptyString($this->usr_correo) ? 'null' : "'%{$this->usr_correo}%'") . ") 
@@ -153,6 +153,34 @@ class Usuario
                     rol_id = {$this->rol_id},
                     suc_id = COALESCE({$this->suc_id}, null)
                     WHERE usr_id = {$this->usr_id}";
+            $resultUsr = $this->db->query($sqlUsuario);
+            if ($resultUsr) {
+                return $this;
+            } else {
+                throw new Exception('error al actualizar');
+            }
+        } catch (Throwable $ex) {
+            $_SESSION['registroError'] = $ex->getMessage();
+            return null;
+        }
+    }
+
+
+    public function ActualizarPerfilUsuario()
+    {
+        try {
+            if ($this->UserUpdateExist()) {
+                throw new Exception('Ya existe un usuario con esos datos');
+            }
+
+            $sqlUsuario = "UPDATE usuario set 
+                    usr_nombre = '{$this->usr_nombre}',                    
+                    usr_correo = '{$this->usr_correo}',
+                    usr_telefono = '{$this->usr_telefono}',
+                    usr_usuario = '{$this->usr_usuario}',                                        
+                    usr_contrasena = COALESCE(" . (!StringFormat::IsNullOrEmptyString($this->usr_contrasena) ? "'" . App::GetHash($this->usr_contrasena) . "'" : 'null') .  " , usr_contrasena)
+                    WHERE usr_id = {$this->usr_id}";
+
             $resultUsr = $this->db->query($sqlUsuario);
             if ($resultUsr) {
                 return $this;

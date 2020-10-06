@@ -19,25 +19,72 @@ class PedidoController
     public function pedidossucursal()
     {
         $ped = new Pedido();
+        $estados = PedidosEstatus::GetAllEstatus();
         $ped->suc_id = $_SESSION['userconnect']->suc_id;
+
+        $ped->usr_id = isset($_SESSION['VENARGS']->nombre) ? $_SESSION['VENARGS']->nombre : null;
+        $ped->ped_fecha = isset($_SESSION['VENARGS']->fec) ? $_SESSION['VENARGS']->fec : null;
+        $ped->pes_id = isset($_SESSION['VENARGS']->estado) ? $_SESSION['VENARGS']->estado : null;
+        $paginaActual = (isset($_SESSION['VENARGS']) && is_numeric($_SESSION['VENARGS']->pag)) ? $_SESSION['VENARGS']->pag : 1;
+
         $pedidos = $ped->GetAllPedidosBySuc();
+        $paginas = AppController::GetPaginationListArray($pedidos, 5);
+        //$pedidos = AppController::CastQueryResultToArray($pedidos);
+
+        $pedidos = array_slice(
+            $pedidos,
+            (($paginaActual - 1) * 5),
+            5
+        );
         require_once 'views/pedido/gestion.php';
+
+        App::UnsetSessionVar('VENARGS');
     }
 
+    public function setVentasAjaxParams()
+    {
+        $_SESSION['VENARGS']->estado = isset($_GET['est']) ? $_GET['est'] : null;
+        $_SESSION['VENARGS']->fec = isset($_GET['fec']) ? $_GET['fec'] : null;
+        $_SESSION['VENARGS']->nombre = isset($_GET['nom']) ? $_GET['nom'] : null;
+        $_SESSION['VENARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
+    }
 
+    public function setEntregasAjaxParams()
+    {
+        $_SESSION['ENARGS']->estado = isset($_GET['est']) ? $_GET['est'] : null;
+        $_SESSION['ENARGS']->fec = isset($_GET['fec']) ? $_GET['fec'] : null;
+        $_SESSION['ENARGS']->nombre = isset($_GET['nom']) ? $_GET['nom'] : null;
+        $_SESSION['ENARGS']->pag = isset($_GET['pag']) ? $_GET['pag'] : 1;
+    }
 
     public function entregassucursal()
     {
         $ped = new Pedido();
         $ped->suc_id = $_SESSION['userconnect']->suc_id;
+        $ped->usr_id = isset($_SESSION['ENARGS']->nombre) ? $_SESSION['ENARGS']->nombre : null;
+        $ped->ped_fecha = isset($_SESSION['ENARGS']->fec) ? $_SESSION['ENARGS']->fec : null;
+        $ped->pes_id = isset($_SESSION['ENARGS']->estado) ? $_SESSION['ENARGS']->estado : null;
+        $paginaActual = (isset($_SESSION['ENARGS']) && is_numeric($_SESSION['ENARGS']->pag)) ? $_SESSION['ENARGS']->pag : 1;
+
         $pedidos = array();
         foreach ($ped->GetAllPedidosBySuc() as $ped) {
             if ($ped->pes_nombre == PedidosEstatus::Despachado || $ped->pes_nombre == PedidosEstatus::EnCamino || $ped->pes_nombre == PedidosEstatus::Entregado) {
                 array_push($pedidos, $ped);
             }
         }
+        
+        $paginas = AppController::GetPaginationListArray($pedidos, 5);
+        //$pedidos = AppController::CastQueryResultToArray($pedidos);
+
+        $pedidos = array_slice(
+            $pedidos,
+            (($paginaActual - 1) * 5),
+            5
+        );
+
         require_once 'views/pedido/entregassucursal.php';
     }
+
 
     public function gestionentrega()
     {

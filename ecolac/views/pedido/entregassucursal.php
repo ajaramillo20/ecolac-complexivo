@@ -9,41 +9,33 @@ if (isset($_SESSION['entregassucursalError'])) {
 ?>
 <div class="miTabla">
     <h2>Listado entregas</h2>
-    <section class="filters">
-        <label for="sucursales">Sucursal:</label>
-        <select class="input-filter" name="sucursales" id="sucursales">
-
-            <?php if (isset($sucursales)) : ?>
-                <?php while ($suc = $sucursales->fetch_object()) : ?>
-
-                    <option value="<?= $suc->suc_id ?>" <?= isset($_SESSION['succonnect']) && $suc->suc_id == $_SESSION['succonnect']->suc_id ? 'selected' : ''; ?>>
-                        <?= $suc->ciu_nombre . ': ' . $suc->suc_nombre ?>
-                    </option>
-
-                <?php endwhile; ?>
-            <?php endif; ?>
-
-        </select>
-
-        <label for="sucursales">Estado:</label>
-        <select class="input-filter" name="categorias" id="categorias">
+    <div class="contenedor-filtros">
+        <label for="roles">Estado:</label>
+        <select class="input-100" name="estado" id="estado">
             <option value="">
                 Todos
             </option>
-            <?php if (isset($tipos)) : ?>
-                <?php while ($tip = $tipos->fetch_object()) : ?>
+            <?php if (isset($estados)) : ?>
+                <?php foreach ($estados as $est) : ?>
 
-                    <option value="<?= $tip->tip_id ?>">
-                        <?= $tip->tip_nombre ?>
+                    <option value="<?= $est ?>" <?= isset($_SESSION['VENARGS']->estado) && $est == $_SESSION['VENARGS']->estado ? 'selected' : ''; ?>>
+                        <?= $est ?>
                     </option>
 
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             <?php endif; ?>
-        </select>
 
-        <label for="">Fecha</label>
-        <input type="date">
-    </section>
+        </select>
+        <label for="fecha">Fecha:</label>
+        <input class="input-100" type="date" name="fecha" id="fecha" value="<?= isset($_SESSION['VENARGS']->fec) ? $_SESSION['VENARGS']->fec : "" ?>">
+
+        <label for="nombre">Cliente:</label>
+        <input class="input-100" type="text" name="nombre" id="nombre" value="<?= isset($_SESSION['VENARGS']->nombre) ? $_SESSION['VENARGS']->nombre : "" ?>">
+        <div class="contenedor">
+            <a class="btnaccion input-48 icon-search" href="javascript:void(0);" onclick="onChange()">Buscar</a>
+            <a class="btnaccion input-48 icon-cancel" href="javascript:void(0);" onclick="cleanFilters()">Limpiar filtros</a>
+        </div>
+    </div>
     <div class="contenedor">
         <table>
             <thead>
@@ -79,3 +71,63 @@ if (isset($_SESSION['entregassucursalError'])) {
         </table>
     </div>
 </div>
+
+<div class="miTabla">
+    <p> <?= $paginaActual . ' de ' . $paginas->Paginas ?></p>
+    <div class="contenedor">
+        <?php if ($paginaActual > 1) : ?>
+            <a class="btnaccion icon-angle-circled-left" href="javascript:void(0);" onclick="onChange(<?= $paginaActual - 1 ?>);"></a>
+        <?php endif; ?>
+        <?php if ($paginaActual < $paginas->Paginas) : ?>
+            <a class="btnaccion icon-angle-circled-right" href="javascript:void(0);" onclick="onChange(<?= $paginaActual + 1 ?>);"></a>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /* PREPARE THE SCRIPT */
+    $("#estado").change(onChange);
+    $("#fecha").change(onChange);
+    $("#nombre").keydown(function(e) {
+        if (e.keyCode == 13) {
+            onChange();
+        }
+    });
+
+    function cleanFilters() {
+        document.getElementById('estado').value = '';
+        document.getElementById('fecha').value = '';
+        document.getElementById('nombre').value = '';
+        onChange();
+    }
+
+    function onChange(pag = '1') {
+        let est = $('#estado').val();
+        let fec = $('#fecha').val();
+        let nom = $('#nombre').val();
+
+        console.log(est + fec + nom);
+        let params = "&pag=" + pag;
+        console.log("pag:" + pag);
+        if (est) {
+            params += "&est=" + est;
+        }
+
+        if (fec) {
+            params += "&fec=" + fec;
+        }
+
+        if (nom) {
+            params += "&nom=" + nom;
+        }
+
+        var baseurl = '<?= base_url . 'pedido/setEntregasAjaxParams' ?>' + params;
+        $.ajax({
+            type: "POST",
+            url: baseurl,
+            success: function(result) {
+                window.location.reload();
+            }
+        });
+    }
+</script>
