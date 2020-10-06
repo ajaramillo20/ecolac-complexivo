@@ -1,5 +1,5 @@
 <div class="miTabla">
-    <h3>Mis pedidos</h3>
+    <h3>Configuración</h3>
     <?php if (isset($_SESSION['configuracionGestionMensaje'])) {
         App::ShowMessage($_SESSION['configuracionGestionMensaje'], 'Confirmación');
         App::UnsetSessionVar('configuracionGestionMensaje');

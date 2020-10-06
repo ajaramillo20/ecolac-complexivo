@@ -11,7 +11,7 @@
     ?>
 
     <div class="contenedor-filtros">
-        <label for="roles">Sucursal:</label>
+        <label for="roles">Rol:</label>
         <select class="input-100" name="roles" id="roles">
             <option value="">
                 Todos
