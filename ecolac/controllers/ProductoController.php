@@ -133,11 +133,18 @@ class ProductoController
 
     public function eliminar()
     {
-        if (isset($_GET['id'])) {
-            $pro = new Producto();
-            $pro->pro_id = $_GET['id'];
+        try {
+            if (isset($_GET['id'])) {
+                $pro = new Producto();
+                $pro->pro_id = $_GET['id'];
 
-            $pro->EliminarProducto();
+                $pro->EliminarProducto();
+                $_SESSION['productoGestionError'] = 'Producto eliminado';
+                App::Redirect('producto/gestion');
+            }
+        } catch (\Throwable $th) {
+            $_SESSION['productoGestionError'] = $th->getMessage();
+            App::Redirect('producto/gestion');
         }
     }
 

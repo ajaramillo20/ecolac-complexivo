@@ -2,6 +2,12 @@
 if (isset($_SESSION['userconnect'])) {
     $usr = $_SESSION['userconnect'];
 }
+
+if (isset($_SESSION['mensajePerfil'])) {
+    App::ShowMessage($_SESSION['mensajePerfil'], 'Confirmación');
+    App::UnsetSessionVar('mensajePerfil');
+}
+
 ?>
 
 <section id="bienvenida">
@@ -15,13 +21,13 @@ if (isset($_SESSION['userconnect'])) {
 
     <form action="<?= base_url . 'usuario/actualizarperfil' ?>" class="form-registro" method="POST">
         <div class="redondos info-redondo">
-            <img src=<?= base_url . "Recursos/img/ecolacLogo.jpg" ?> />
+            <img src=<?= base_url . "Recursos/img/usuarioDefault.png" ?> />
 
-            <div id="div_file">
+            <!-- <div id="div_file">
                 <h4 class="icon-pencil-neg">Cambiar foto de perfil
                 </h4>
-                <!-- <input class="inputImagen" type="file" /> -->
-            </div>
+                <input class="inputImagen" type="file" />
+            </div> -->
         </div>
         <div class="contenedor-inputs">
             <input hidden type="text" name="id" placeholder="id" required value="<?= isset($entity) ? $entity->usr_id : '' ?>" class="input-100" />

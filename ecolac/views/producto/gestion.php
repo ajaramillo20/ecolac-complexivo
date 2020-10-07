@@ -1,11 +1,11 @@
 <div class="miTabla">
     <h3>Gestion de productos</h3>
     <?php if (isset($_SESSION['productoGestionMensaje'])) {
-        echo '<p class="succes">' . $_SESSION['productoGestionMensaje'] . '</p>';
+        App::ShowMessage($_SESSION['productoGestionMensaje'], 'Confirmación');
         App::UnsetSessionVar('productoGestionMensaje');
     }
     if (isset($_SESSION['productoGestionError'])) {
-        echo '<p class="error">' . $_SESSION['productoGestionError'] . '</p>';
+        App::ShowMessage($_SESSION['productoGestionError'], 'Error');
         App::UnsetSessionVar('productoGestionError');
     }
     ?>

@@ -114,6 +114,13 @@ class Producto
 
     public function EliminarProducto()
     {
+        $sql = "DELETE FROM producto WHERE pro_id = {$this->pro_id}";
+
+        $result = $this->db->query($sql);
+
+        if (!$result) {
+            throw new Exception("No se pudo eliminar el producto");
+        }
     }
 
     public function ActualizarProducto()

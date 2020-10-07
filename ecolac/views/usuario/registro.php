@@ -1,7 +1,7 @@
 <div class="contenedor div-form">
     <?php
     if (isset($_SESSION['registroError'])) {
-        echo '<p class="error">' . $_SESSION['registroError'] . '</p>';
+        App::ShowMessage($_SESSION['registroError'], 'Error');
         App::UnsetSessionVar('registroError');
     } else if (isset($_SESSION['userconnect']) && !isset($entity)) {
         App::Redirect(base_url);

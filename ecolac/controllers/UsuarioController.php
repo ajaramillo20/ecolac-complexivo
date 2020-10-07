@@ -112,31 +112,30 @@ class UsuarioController
     //CRUD
     public function agregar()
     {
-        if (isset($_POST)) {
-            $usr = new Usuario();
-            $usr->usr_nombre = $_POST['nombre'];
-            $usr->usr_cedula = $_POST['cedula'];
-            $usr->usr_contrasena = $_POST['contrasena'];
-            $usr->usr_correo = $_POST['correo'];
-            $usr->usr_telefono = $_POST['telefono'];
-            $usr->usr_usuario = $_POST['usuario'];
+        try {
+            if (isset($_POST)) {
+                $usr = new Usuario();
+                $usr->usr_nombre = $_POST['nombre'];
+                $usr->usr_cedula = $_POST['cedula'];
+                $usr->usr_contrasena = $_POST['contrasena'];
+                $usr->usr_correo = $_POST['correo'];
+                $usr->usr_telefono = $_POST['telefono'];
+                $usr->usr_usuario = $_POST['usuario'];
 
-            $dir = new Direccion();
-            $dir->dir_direccion = $_POST['direccion'];
-            $dir->dir_latitud = $_POST['latitud'];
-            $dir->dir_longitud = $_POST['longitud'];
-            $dir->ciu_id = $_POST['ciudad'];
-            array_push($usr->Direccion, $dir);
+                $dir = new Direccion();
+                $dir->dir_direccion = $_POST['direccion'];
+                $dir->dir_latitud = $_POST['latitud'];
+                $dir->dir_longitud = $_POST['longitud'];
+                $dir->ciu_id = $_POST['ciudad'];
+                array_push($usr->Direccion, $dir);
 
-            //$usr->Direccion = $dir;
-
-            $usr = $usr->GuardarUsuario();
-
-            if (is_null($usr)) {
-                App::Redirect('usuario/registro');
-            } else {
+                //$usr->Direccion = $dir;
+                $usr = $usr->GuardarUsuario();
                 App::Redirect('usuario/registroCompleto');
             }
+        } catch (\Throwable $th) {
+            $_SESSION['registroError'] = $th->getMessage();
+            App::Redirect('usuario/registrar');
         }
     }
 
@@ -165,18 +164,25 @@ class UsuarioController
 
     public function actualizarperfil()
     {
-        if (isset($_POST)) {
+        try {
+            if (isset($_POST)) {
 
 
-            $usr = new Usuario();
-            $usr->usr_id = $_POST['id'];
-            $usr->usr_nombre = $_POST['nombre'];
-            $usr->usr_correo = $_POST['correo'];
-            $usr->usr_telefono = $_POST['telefono'];
-            $usr->usr_usuario = $_POST['usuario'];
-            $usr->usr_contrasena = $_POST['contrasena'];
+                $usr = new Usuario();
+                $usr->usr_id = $_POST['id'];
+                $usr->usr_nombre = $_POST['nombre'];
+                $usr->usr_correo = $_POST['correo'];
+                $usr->usr_telefono = $_POST['telefono'];
+                $usr->usr_usuario = $_POST['usuario'];
+                $usr->usr_contrasena = $_POST['contrasena'];
 
-            $result = $usr->ActualizarPerfilUsuario();
+                $result = $usr->ActualizarPerfilUsuario();
+                $_SESSION['mensajePerfil'] = 'Datos Actualizados';
+                App::Redirect('usuario/perfil');
+            }
+        } catch (\Throwable $th) {
+            $_SESSION['mensajePerfil'] = $th->getMessage();
+            App::Redirect('usuario/perfil');
         }
     }
 
