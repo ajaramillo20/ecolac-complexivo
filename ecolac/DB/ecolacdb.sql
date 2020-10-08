@@ -154,3 +154,45 @@ CREATE TABLE ProductoPedido (
 )ENGINE = InnoDB;
 
 
+--
+
+CREATE TABLE Proveedor
+(
+    prv_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    prv_nombre VARCHAR(50) NOT NULL,
+    prv_telefono VARCHAR(15) NOT NULL,
+    prv_correo VARCHAR(100) NOT NULL,
+    dir_id INT NOT NULL    ,
+    CONSTRAINT FK_proveedorToTable_Direccion FOREIGN KEY (dir_id) REFERENCES Direccion (dir_id)
+)ENGINE = InnoDB;
+
+CREATE TABLE MateriaPrima
+(
+    mat_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    mat_nombre VARCHAR(50) NOT NULL
+)ENGINE = InnoDB;
+
+CREATE TABLE EstadoMateria
+(
+ esm_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+ esm_nombre VARCHAR(20) NOT NULL,
+)ENGINE = InnoDB;
+
+CREATE TABLE MateriaPedido
+(
+map_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+mat_id INT NOT NULL,
+suc_id INT NOT NULL,
+map_cantidad INT NOT NULL,
+map_fecha DATETIME NOT NULL,
+map_fechaIngreso DATETIME NULL,
+esm_id INT NULL,
+map_proposito VARCHAR(100) NOT NULL,
+tip_id INT NOT NULL,
+prv_id INT NOT NULL,
+CONSTRAINT FK_matPedido_ToTable_MateriaPrima FOREIGN KEY (mat_id) REFERENCES MateriaPrima (mat_id),
+CONSTRAINT FK_matPedido_ToTable_Sucursal FOREIGN KEY (suc_id) REFERENCES Sucursal (suc_id),
+CONSTRAINT FK_matPEdido_ToTable_EstadoMateria FOREIGN KEY (esm_id) REFERENCES EstadoMateria (esm_id),
+CONSTRAINT FK_matPedido_ToTable_Tipo FOREIGN KEY (tip_id) REFERENCES tipo (tip_id),
+CONSTRAINT FK_matPedido_ToTable_Proveedor FOREIGN KEY (prv_id) REFERENCES Proveedor (prv_id)
+)ENGINE = InnoDB;
