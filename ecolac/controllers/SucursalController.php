@@ -69,7 +69,7 @@ class SucursalController
             $suc->Direccion->dir_id = $_POST['dir_id'];
             $suc->Direccion->dir_latitud = $_POST['latitud'];
             $suc->Direccion->dir_longitud = $_POST['longitud'];
-            $suc->Direccion->ciu_id = 1;
+            $suc->Direccion->ciu_id = $_POST['ciudad'];
 
             $updateResult =  $suc->ActualizarSucursal();
 

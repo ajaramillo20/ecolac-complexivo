@@ -26,8 +26,8 @@
                     </option>
                 <?php endforeach; ?>
             </select>
-            <label for="observacion">Observaciones para su pedido</label>
-            <input type="text" name="observacion" placeholder="Observaciones" class="input-100" value="<?= isset($entity) && !is_null($entity) ? $entity->dir_direccion : ''; ?>" />
+            <label for="observacion">Matriz</label>
+            <input type="text" readonly name="observacion" placeholder="Observaciones" class="input-100" value="<?= $_SESSION['succonnect']->suc_nombre ?>" />
 
             <input type="submit" value="Guardar" class="btn-enviar" />
         </div>

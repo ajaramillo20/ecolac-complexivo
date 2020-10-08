@@ -67,10 +67,7 @@ class UsuarioController
 
     public function logout()
     {
-        App::UnsetSessionVar('carrito');
-        App::UnsetSessionVar('userconnect');
-        App::UnsetSessionVar('dirconnect');
-        App::UnsetSessionVar('succonnect');
+        session_destroy();
         App::Redirect();
     }
 

@@ -71,7 +71,8 @@ class Sucursal
             $sqlDir = "UPDATE direccion SET 
                     dir_direccion = '{$this->Direccion->dir_direccion}',
                     dir_latitud = '{$this->Direccion->dir_latitud}',
-                    dir_longitud = '{$this->Direccion->dir_longitud}'
+                    dir_longitud = '{$this->Direccion->dir_longitud}',
+                    ciu_id = '{$this->Direccion->ciu_id}'
                     WHERE dir_id = {$this->Direccion->dir_id}";
 
             $this->db->begin_transaction();

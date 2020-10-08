@@ -102,7 +102,7 @@ class CarritoController
             //     throw new Exception("Este producto no es de la sucursal seleccionada");
             // }
         } else {
-            throw new Exception("Regitre una dirección o seleccione una sucursal");
+            //throw new Exception("Regitre una dirección o seleccione una sucursal");
         }
     }
 

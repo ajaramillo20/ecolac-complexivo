@@ -2,12 +2,11 @@
     <div class="contenedor-filtros">
         <label for="sucursales">Sucursal:</label>
         <select class="input-100" name="sucursales" id="sucursales">
-            <option value="">
-                Todos
-            </option>
             <?php if (isset($sucursales)) : ?>
+                <?php if (!isset($_SESSION['succonnect'])) : ?>
+                    <option>Todos</option>
+                <?php endif; ?>
                 <?php while ($suc = $sucursales->fetch_object()) : ?>
-
                     <option value="<?= $suc->suc_id ?>" <?= isset($_SESSION['succonnect']->suc_id) && $suc->suc_id == $_SESSION['succonnect']->suc_id ? 'selected' : ''; ?>>
                         <?= $suc->ciu_nombre . ': ' . $suc->suc_nombre ?>
                     </option>

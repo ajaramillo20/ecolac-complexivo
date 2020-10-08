@@ -28,9 +28,9 @@
                         <td data-label="Sucursal id"><?= $suc->suc_id ?></td>
                         <td data-label="Nombre"><?= $suc->suc_nombre ?></td>
                         <td data-label="Ciudad"><?= $suc->ciu_nombre ?></td>
-                        <td data-label="Dirección"><?= $suc->dir_direccion ?></td>                        
+                        <td data-label="Dirección"><?= $suc->dir_direccion ?></td>
                         <td data-label="Editar"><a class="icon-pencil-neg" href="<?= base_url ?>sucursal/editar&id=<?= $suc->suc_id ?>"></a></td>
-                        <td data-label="Eliminar"><a onclick="return ConfirmDelete();" class="icon-trash btn-action" href="<?= base_url ?>sucursal/eliminar&id=<?= $suc->suc_id ?>"></a></td>
+                        <td data-label="Eliminar"><a onclick="return ConfirmDelete('<?= base_url ?>sucursal/eliminar&id=<?= $suc->suc_id ?>');" class="icon-trash btn-action" href="#"></a></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

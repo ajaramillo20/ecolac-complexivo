@@ -113,7 +113,7 @@ class ProductoController
             if ($archivo['size'] == 0) {
                 $pro->Recurso = null;
             } else {
-                if (App::UploadImage($archivo)) {
+                if (App::UploadImage($archivo,products_path)) {
                     $pro->Recurso = new Recurso();
                     $pro->Recurso->rec_id = $_POST['rec_id'];
                     $pro->Recurso->rec_nombre = $archivo['name'];

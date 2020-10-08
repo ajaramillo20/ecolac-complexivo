@@ -6,6 +6,7 @@ class PedidoController
 {
     public function realizar()
     {
+        $this->ValidarSucursal();
         require_once 'views/pedido/registro.php';
     }
 
@@ -59,6 +60,7 @@ class PedidoController
 
     public function entregassucursal()
     {
+        $estados = PedidosEstatus::GetAllEstatus();
         $ped = new Pedido();
         $ped->suc_id = $_SESSION['userconnect']->suc_id;
         $ped->usr_id = isset($_SESSION['ENARGS']->nombre) ? $_SESSION['ENARGS']->nombre : null;
@@ -72,7 +74,7 @@ class PedidoController
                 array_push($pedidos, $ped);
             }
         }
-        
+
         $paginas = AppController::GetPaginationListArray($pedidos, 5);
         //$pedidos = AppController::CastQueryResultToArray($pedidos);
 
@@ -146,9 +148,23 @@ class PedidoController
         }
     }
 
+    public function ValidarSucursal()
+    {
+        if ($_SESSION['succonnect']) {
+            $suc = AppController::GetsucursalById($_SESSION['carrito'][0]['producto']->suc_id);
+
+            if ($suc->suc_id != $_SESSION['succonnect']->suc_id) {
+                $_SESSION['succonnect'] = $suc;
+            }
+        } else {
+            $_SESSION['succonnect'] = AppController::GetsucursalById($_SESSION['carrito'][0]['producto']->suc_id);
+        }
+    }
+
     public function agregar()
     {
         try {
+            $this->ValidarSucursal();
             if (isset($_POST) && isset($_SESSION['succonnect'])) {
 
                 APP::ValidarDireccionPedido($_POST['direccion']);
